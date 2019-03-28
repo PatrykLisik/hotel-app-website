@@ -3,6 +3,7 @@ node_js:
   - "node"
 before_script:
  - "cd clinet/"
+ - npm install
 script:
   - npm run lint
   - npm test
