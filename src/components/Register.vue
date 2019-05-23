@@ -1,80 +1,76 @@
 <template>
-  <form>
-    <h1>aaa</h1>
-  </form>
+  <v-layout column>
+    <v-flex xs6 offset-xs3>
+        <form>
+          <v-text-field
+            v-model="name"
+            v-validate="'required|max:10'"
+            :counter="10"
+            :error-messages="errors.collect('name')"
+            label="Name"
+            data-vv-name="name"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="email"
+            v-validate="'required|email'"
+            :error-messages="errors.collect('email')"
+            label="E-mail"
+            data-vv-name="email"
+            required
+          ></v-text-field>
+
+          <v-btn @click="submit">submit</v-btn>
+          <v-btn @click="clear">clear</v-btn>
+        </form>
+    </v-flex>
+  </v-layout>
+
 </template>
 
 <script>
-import { validationMixin } from 'vuelidate'
-import { required, maxLength, email } from 'vuelidate/lib/validators'
+import Vue from 'vue'
+import VeeValidate from 'vee-validate'
+
+Vue.use(VeeValidate)
 
 export default {
-  mixins: [validationMixin],
   name: 'Register',
-
-  validations: {
-    name: { required, maxLength: maxLength(10) },
-    email: { required, email },
-    select: { required },
-    checkbox: {
-      checked (val) {
-        return val
-      }
-    }
+  $_veeValidate: {
+    validator: 'new'
   },
 
   data: () => ({
     name: '',
     email: '',
     select: null,
-    items: [
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      'Item 4'
-    ],
-    checkbox: false
+    dictionary: {
+      attributes: {
+        email: 'E-mail Address'
+        // custom attributes
+      },
+      custom: {
+        name: {
+          required: () => 'Name can not be empty',
+          max: 'The name field may not be greater than 10 characters'
+          // custom messages
+        }
+      }
+    }
   }),
 
-  computed: {
-    checkboxErrors () {
-      const errors = []
-      if (!this.$v.checkbox.$dirty) return errors
-      !this.$v.checkbox.checked && errors.push('You must agree to continue!')
-      return errors
-    },
-    selectErrors () {
-      const errors = []
-      if (!this.$v.select.$dirty) return errors
-      !this.$v.select.required && errors.push('Item is required')
-      return errors
-    },
-    nameErrors () {
-      const errors = []
-      if (!this.$v.name.$dirty) return errors
-      !this.$v.name.maxLength && errors.push('Name must be at most 10 characters long')
-      !this.$v.name.required && errors.push('Name is required.')
-      return errors
-    },
-    emailErrors () {
-      const errors = []
-      if (!this.$v.email.$dirty) return errors
-      !this.$v.email.email && errors.push('Must be valid e-mail')
-      !this.$v.email.required && errors.push('E-mail is required')
-      return errors
-    }
+  mounted () {
+    this.$validator.localize('en', this.dictionary)
   },
 
   methods: {
     submit () {
-      this.$v.$touch()
+      this.$validator.validateAll()
     },
     clear () {
-      this.$v.$reset()
       this.name = ''
       this.email = ''
-      this.select = null
-      this.checkbox = false
+      this.$validator.reset()
     }
   }
 }
