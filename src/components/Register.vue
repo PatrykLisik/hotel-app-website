@@ -1,28 +1,33 @@
 <template>
-  <v-layout column>
-    <v-flex xs6 offset-xs3>
-        <form>
-          <v-text-field
-            v-model="name"
-            v-validate="'required|max:10'"
-            :counter="10"
-            :error-messages="errors.collect('name')"
-            label="Name"
-            data-vv-name="name"
-            required
-          ></v-text-field>
-          <v-text-field
-            v-model="email"
-            v-validate="'required|email'"
-            :error-messages="errors.collect('email')"
-            label="E-mail"
-            data-vv-name="email"
-            required
-          ></v-text-field>
-
-          <v-btn @click="submit">submit</v-btn>
-          <v-btn @click="clear">clear</v-btn>
-        </form>
+  <v-layout align-center justify-center>
+    <v-flex xs12 sm8 md4>
+      <v-card class="elevation-12">
+        <v-toolbar dark color="primary">
+          <v-toolbar-title>Login form</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-tooltip bottom>
+            <v-btn
+              icon
+              large
+              :href="source"
+              target="_blank"
+              slot="activator"
+            >
+            </v-btn>
+            <span>Source</span>
+          </v-tooltip>
+        </v-toolbar>
+        <v-card-text>
+          <v-form>
+            <v-text-field prepend-icon="person" name="login" label="Login" type="text"></v-text-field>
+            <v-text-field prepend-icon="lock" name="password" label="Password" id="password" type="password"></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary">Login</v-btn>
+        </v-card-actions>
+      </v-card>
     </v-flex>
   </v-layout>
 
