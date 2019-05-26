@@ -52,7 +52,9 @@
           <v-btn
             color="primary"
             :disabled ="errors.any()"
+            @click="submit"
           >Submit</v-btn>
+          <v-btn @click="clear">clear</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -63,6 +65,8 @@
 <script>
 import Vue from 'vue'
 import VeeValidate from 'vee-validate'
+
+import authenticationService from '../services/AuthenticationService'
 
 Vue.use(VeeValidate)
 
@@ -84,12 +88,20 @@ export default {
   },
 
   methods: {
-    submit () {
-      this.$validator.validateAll()
+    async submit () {
+      console.log('submit')
+      await authenticationService.register({
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.email,
+        password: this.password
+      })
     },
     clear () {
-      this.name = ''
+      this.firstName = ''
+      this.lastName = ''
       this.email = ''
+      this.password = ''
       this.$validator.reset()
     }
   }
