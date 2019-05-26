@@ -1,31 +1,55 @@
 <template>
   <v-layout align-center justify-center>
-    <v-flex xs12 sm8 md4>
-      <v-card class="elevation-12">
+    <v-flex xs12 >
+      <v-card >
         <v-toolbar dark color="primary">
-          <v-toolbar-title>Login form</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-tooltip bottom>
-            <v-btn
-              icon
-              large
-              :href="source"
-              target="_blank"
-              slot="activator"
-            >
-            </v-btn>
-            <span>Source</span>
-          </v-tooltip>
+          <v-toolbar-title>Register</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
           <v-form>
-            <v-text-field prepend-icon="person" name="login" label="Login" type="text"></v-text-field>
-            <v-text-field prepend-icon="lock" name="password" label="Password" id="password" type="password"></v-text-field>
+            <v-text-field
+              v-model="firstName"
+              v-validate="'required|alpha|max:32|min:3'"
+              :counter="32"
+              :error-messages="errors.collect('first name')"
+              label="First name"
+              data-vv-name="first name"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="lastName"
+              v-validate="'required|alpha|max:32|min:3'"
+              :counter="32"
+              :error-messages="errors.collect('last name')"
+              label="Last name"
+              data-vv-name="last name"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="email"
+              v-validate="'required|email'"
+              :error-messages="errors.collect('email')"
+              label="Email"
+              data-vv-name="email"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="password"
+              v-validate="'required|max:32|min:8'"
+              :counter="32"
+              :error-messages="errors.collect('password')"
+              label="Password"
+              data-vv-name="password"
+              :type="showPassword ? 'text' : 'password'"
+              :append-icon="showPassword ? 'visibility' : 'visibility_off'"
+              @click:append="showPassword = !showPassword"
+              required
+            ></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary">Login</v-btn>
+          <v-btn color="primary">Submit</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -46,22 +70,10 @@ export default {
   },
 
   data: () => ({
-    name: '',
-    email: '',
-    select: null,
-    dictionary: {
-      attributes: {
-        email: 'E-mail Address'
-        // custom attributes
-      },
-      custom: {
-        name: {
-          required: () => 'Name can not be empty',
-          max: 'The name field may not be greater than 10 characters'
-          // custom messages
-        }
-      }
-    }
+    showPassword: false,
+    firstName: '',
+    lastName: '',
+    email: ''
   }),
 
   mounted () {
