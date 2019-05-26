@@ -35,8 +35,8 @@
             ></v-text-field>
             <v-text-field
               v-model="password"
-              v-validate="'required|max:32|min:8'"
-              :counter="32"
+              v-validate="'required|max:128|min:8'"
+              :counter="128"
               :error-messages="errors.collect('password')"
               label="Password"
               data-vv-name="password"
@@ -49,7 +49,10 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary">Submit</v-btn>
+          <v-btn
+            color="primary"
+            :disabled ="errors.any()"
+          >Submit</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
