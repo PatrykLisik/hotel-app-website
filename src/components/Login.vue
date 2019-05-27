@@ -3,28 +3,10 @@
     <v-flex xs12>
       <v-card>
         <v-toolbar dark color="primary">
-          <v-toolbar-title>Register</v-toolbar-title>
+          <v-toolbar-title>Login</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
           <v-form>
-            <v-text-field
-              v-model="firstName"
-              v-validate="'required|alpha|max:32|min:3'"
-              :counter="32"
-              :error-messages="errors.collect('first name')"
-              label="First name"
-              data-vv-name="first name"
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="lastName"
-              v-validate="'required|alpha|max:32|min:3'"
-              :counter="32"
-              :error-messages="errors.collect('last name')"
-              label="Last name"
-              data-vv-name="last name"
-              required
-            ></v-text-field>
             <v-text-field
               v-model="email"
               v-validate="'required|email'"
@@ -49,8 +31,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" :disabled="errors.any()" @click="submit"
-            >Submit</v-btn
+          <v-btn color="primary" :disabled="errors.any()" @click="login"
+            >Login</v-btn
           >
           <v-btn @click="clear">clear</v-btn>
         </v-card-actions>
@@ -63,27 +45,19 @@
 import authenticationService from '../services/AuthenticationService'
 
 export default {
-  name: 'Register',
+  name: 'Login',
   $_veeValidate: {
     validator: 'new'
   },
 
   data: () => ({
     showPassword: false,
-    firstName: '',
-    lastName: '',
     password: '',
     email: ''
   }),
-
-  mounted () {
-    this.$validator.localize('en', this.dictionary)
-  },
-
   methods: {
     async submit () {
-      console.log('submit')
-      await authenticationService.register({
+      await authenticationService.login({
         firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,
