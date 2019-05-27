@@ -1,14 +1,13 @@
 <template>
   <v-toolbar fixed>
     <v-toolbar-title>
-      Hotel app
+      <v-btn flat to="/">Hotel App</v-btn>
     </v-toolbar-title>
     <v-spacer></v-spacer>
 
     <v-toolbar-items>
-      <v-btn flat>Link One</v-btn>
-      <v-btn flat>Link Two</v-btn>
-      <v-btn flat>Link Three</v-btn>
+      <v-btn flat>Sign in</v-btn>
+      <v-btn flat to="register">Sign up</v-btn>
     </v-toolbar-items>
   </v-toolbar>
 </template>
@@ -20,5 +19,7 @@ export default {
 </script>
 
 <style scoped>
-
+  a {
+    text-decoration: none;
+  }
 </style>
