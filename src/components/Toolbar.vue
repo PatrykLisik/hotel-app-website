@@ -7,8 +7,17 @@
     <v-spacer></v-spacer>
 
     <v-toolbar-items>
-      <v-btn flat to="login">Sign in</v-btn>
-      <v-btn flat to="register">Sign up</v-btn>
+      <v-btn
+        flat
+        to="login"
+        v-if="!$store.state.isUserLoggedIn"
+      >Sign in
+      </v-btn>
+      <v-btn
+        flat
+        to="register"
+        v-if="!$store.state.isUserLoggedIn"
+      >Sign up</v-btn>
     </v-toolbar-items>
   </v-toolbar>
 </template>
