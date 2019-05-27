@@ -1,4 +1,4 @@
-import Vue from 'vue/types'
+import Vue from 'vue'
 
 Vue.component('v-alert', {})
 Vue.component('v-app', {})
