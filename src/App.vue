@@ -1,7 +1,7 @@
 <template>
   <v-app>
+    <toolbar></toolbar>
     <v-navigation-drawer app></v-navigation-drawer>
-    <v-toolbar app></v-toolbar>
     <v-content>
       <v-container fluid>
         <router-view></router-view>
@@ -12,8 +12,14 @@
 </template>
 
 <script>
+import Toolbar from './components/Toolbar'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {Toolbar},
+  comments: {
+    Toolbar
+  }
 }
 </script>
 
