@@ -56,17 +56,23 @@ export default {
     email: ''
   }),
   methods: {
-    async submit () {
-      await authenticationService.login({
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: this.email,
-        password: this.password
-      })
+    async login () {
+      try {
+        const response = await authenticationService.login({
+          email: this.email,
+          password: this.password
+        })
+        console.log(response)
+        await this.$store.dispatch('setToken', response.data.token)
+        await this.$store.dispatch('setFirstName', response.data.user.firstName)
+        await this.$store.dispatch('setLastName', response.data.user.lastName)
+        await this.$store.dispatch('setRole', response.data.role.name)
+        await this.$store.dispatch('setIsUserLoggedIn', true)
+      } catch (err) {
+        this.error = err.response.data.error
+      }
     },
     clear () {
-      this.firstName = ''
-      this.lastName = ''
       this.email = ''
       this.password = ''
       this.$validator.reset()
