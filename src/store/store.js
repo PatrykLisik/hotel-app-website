@@ -15,6 +15,11 @@ export default new Vuex.Store({
   mutations: {
     setToken (state, token) {
       state.token = token
+      if (token) {
+        state.isUserLoggedIn = true
+      } else {
+        state.token = false
+      }
     },
     setFirstName (state, firstName) {
       state.firstName = firstName

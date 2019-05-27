@@ -62,12 +62,11 @@ export default {
           email: this.email,
           password: this.password
         })
-        console.log(response)
+
         await this.$store.dispatch('setToken', response.data.token)
         await this.$store.dispatch('setFirstName', response.data.user.firstName)
         await this.$store.dispatch('setLastName', response.data.user.lastName)
         await this.$store.dispatch('setRole', response.data.role.name)
-        await this.$store.dispatch('setIsUserLoggedIn', true)
       } catch (err) {
         this.error = err.response.data.error
       }
