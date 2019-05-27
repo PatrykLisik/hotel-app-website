@@ -1,6 +1,11 @@
 <template>
   <v-layout align-center justify-center>
     <v-flex xs12>
+    <Alert
+      :msg="this.message"
+      :type="this.messageType"
+      :alert="showAlert"
+    />
       <v-card>
         <v-toolbar dark color="primary">
           <v-toolbar-title>Login</v-toolbar-title>
@@ -32,7 +37,8 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="primary" :disabled="errors.any()" @click="login"
-            >Login</v-btn
+          >Login
+          </v-btn
           >
           <v-btn @click="clear">clear</v-btn>
         </v-card-actions>
@@ -43,9 +49,11 @@
 
 <script>
 import authenticationService from '../services/AuthenticationService'
+import Alert from './Alert'
 
 export default {
   name: 'Login',
+  components: {Alert},
   $_veeValidate: {
     validator: 'new'
   },
@@ -53,7 +61,10 @@ export default {
   data: () => ({
     showPassword: false,
     password: '',
-    email: ''
+    email: '',
+    message: '',
+    messageType: '',
+    showAlert: false
   }),
   methods: {
     async login () {
@@ -67,14 +78,21 @@ export default {
         await this.$store.dispatch('setFirstName', response.data.user.firstName)
         await this.$store.dispatch('setLastName', response.data.user.lastName)
         await this.$store.dispatch('setRole', response.data.role.name)
+        this.message = 'successful login'
+        this.messageType = 'success'
       } catch (err) {
-        this.error = err.response.data.error
+        this.message = err.response.data.error
+        this.messageType = 'error'
+      } finally {
+        this.showAlert = false
+        this.showAlert = true
       }
     },
     clear () {
       this.email = ''
       this.password = ''
       this.$validator.reset()
+      this.showAlert = false
     }
   }
 }
