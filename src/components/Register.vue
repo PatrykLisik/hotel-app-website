@@ -99,6 +99,8 @@ export default {
           email: this.email,
           password: this.password
         })
+        this.message = 'successful register'
+        this.messageType = 'success'
       } catch (err) {
         this.message = err.response.data.error
         this.messageType = 'error'

@@ -1,5 +1,6 @@
 <template>
-  <v-toolbar fixed>
+  <v-toolbar
+    fixed>
     <v-spacer></v-spacer>
     <v-toolbar-title>
       <v-btn flat to="/">Hotel App</v-btn>
