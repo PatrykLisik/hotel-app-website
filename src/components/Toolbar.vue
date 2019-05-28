@@ -1,29 +1,21 @@
 <template>
-  <v-toolbar
-    dense
-    fixed
-    clipped-left
-    app
-  >
-    <v-spacer></v-spacer>
-    <v-toolbar-title>
-      <v-btn flat to="/">
-        Hotel App</v-btn>
+  <v-toolbar dense fixed clipped-left app>
+    <v-toolbar-title class="text-uppercase grey--text">
+      <span class="font-weight-bold">Hotel</span>
+      <span>App</span>
     </v-toolbar-title>
     <v-spacer></v-spacer>
 
     <v-toolbar-items>
-      <v-btn
-        flat
-        to="login"
-        v-if="!$store.state.isUserLoggedIn"
-      >Sign in
+      <v-btn color ="grey" flat to="login" v-if="!$store.state.isUserLoggedIn"
+        >Sign in
       </v-btn>
-      <v-btn
-        flat
-        to="register"
-        v-if="!$store.state.isUserLoggedIn"
-      >Sign up</v-btn>
+      <v-btn color="grey" flat to="register" v-if="!$store.state.isUserLoggedIn">
+        <span> Sign up</span>
+      </v-btn>
+      <v-btn color="grey" flat to="/" v-if="$store.state.isUserLoggedIn">
+        <span> Sign out</span>
+      </v-btn>
     </v-toolbar-items>
   </v-toolbar>
 </template>
@@ -35,7 +27,7 @@ export default {
 </script>
 
 <style scoped>
-  a {
-    text-decoration: none;
-  }
+a {
+  text-decoration: none;
+}
 </style>
