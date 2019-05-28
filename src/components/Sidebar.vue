@@ -3,8 +3,15 @@
     fixed
     clipped
     app
+    v-if="$store.state.showSidebar"
+    class="primary"
   >
     <v-list dense>
+      <v-list-tile>
+        <v-list-tile-content>
+          <v-list-tile-content class="white--text">Dashboard</v-list-tile-content>
+        </v-list-tile-content>
+      </v-list-tile>
       <v-list-tile>
         <v-list-tile-action>
           <v-icon>date_range</v-icon>

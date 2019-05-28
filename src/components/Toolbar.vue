@@ -1,5 +1,6 @@
 <template>
   <v-toolbar dense fixed clipped-left app>
+    <v-toolbar-side-icon class="grey--text" @click="showSidebar()"></v-toolbar-side-icon>
     <v-toolbar-title class="text-uppercase grey--text">
       <span class="font-weight-bold">Hotel</span>
       <span>App</span>
@@ -22,7 +23,12 @@
 
 <script>
 export default {
-  name: 'Toolbar'
+  name: 'Toolbar',
+  methods: {
+    async showSidebar () {
+      await this.$store.dispatch('toggleSidebar')
+    }
+  }
 }
 </script>
 
