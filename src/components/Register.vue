@@ -1,6 +1,11 @@
 <template>
   <v-layout align-center justify-center>
     <v-flex xs12>
+      <Alert
+        :msg="this.message"
+        :type="this.messageType"
+        :alert="showAlert"
+      />
       <v-card>
         <v-toolbar dark color="primary">
           <v-toolbar-title>Register</v-toolbar-title>
@@ -61,9 +66,11 @@
 
 <script>
 import authenticationService from '../services/AuthenticationService'
+import Alert from './Alert'
 
 export default {
   name: 'Register',
+  components: {Alert},
   $_veeValidate: {
     validator: 'new'
   },
@@ -73,7 +80,10 @@ export default {
     firstName: '',
     lastName: '',
     password: '',
-    email: ''
+    email: '',
+    message: '',
+    messageType: '',
+    showAlert: false
   }),
 
   mounted () {
@@ -82,13 +92,20 @@ export default {
 
   methods: {
     async submit () {
-      console.log('submit')
-      await authenticationService.register({
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: this.email,
-        password: this.password
-      })
+      try {
+        await authenticationService.register({
+          firstName: this.firstName,
+          lastName: this.lastName,
+          email: this.email,
+          password: this.password
+        })
+      } catch (err) {
+        this.message = err.response.data.error
+        this.messageType = 'error'
+      } finally {
+        this.showAlert = false
+        this.showAlert = true
+      }
     },
     clear () {
       this.firstName = ''
@@ -96,6 +113,7 @@ export default {
       this.email = ''
       this.password = ''
       this.$validator.reset()
+      this.showAlert = false
     }
   }
 }
