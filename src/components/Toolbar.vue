@@ -1,9 +1,14 @@
 <template>
   <v-toolbar
-    fixed>
+    dense
+    fixed
+    clipped-left
+    app
+  >
     <v-spacer></v-spacer>
     <v-toolbar-title>
-      <v-btn flat to="/">Hotel App</v-btn>
+      <v-btn flat to="/">
+        Hotel App</v-btn>
     </v-toolbar-title>
     <v-spacer></v-spacer>
 
