@@ -1,35 +1,17 @@
 <template>
   <v-layout align-center justify-center>
     <v-flex xs12>
-      <Alert
-        :msg="this.message"
-        :type="this.messageType"
-        :alert="showAlert"
-      />
+    <Alert
+      :msg="this.message"
+      :type="this.messageType"
+      :alert="showAlert"
+    />
       <v-card>
         <v-toolbar dark color="primary">
-          <v-toolbar-title>Register</v-toolbar-title>
+          <v-toolbar-title>Login</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
           <v-form>
-            <v-text-field
-              v-model="firstName"
-              v-validate="'required|alpha|max:32|min:3'"
-              :counter="32"
-              :error-messages="errors.collect('first name')"
-              label="First name"
-              data-vv-name="first name"
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="lastName"
-              v-validate="'required|alpha|max:32|min:3'"
-              :counter="32"
-              :error-messages="errors.collect('last name')"
-              label="Last name"
-              data-vv-name="last name"
-              required
-            ></v-text-field>
             <v-text-field
               v-model="email"
               v-validate="'required|email'"
@@ -54,8 +36,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" :disabled="errors.any()" @click="submit"
-            >Submit</v-btn
+          <v-btn color="primary" :disabled="errors.any()" @click="login"
+          >Login
+          </v-btn
           >
           <v-btn @click="clear">clear</v-btn>
         </v-card-actions>
@@ -69,7 +52,7 @@ import authenticationService from '../services/AuthenticationService'
 import Alert from './Alert'
 
 export default {
-  name: 'Register',
+  name: 'Login',
   components: {Alert},
   $_veeValidate: {
     validator: 'new'
@@ -77,29 +60,25 @@ export default {
 
   data: () => ({
     showPassword: false,
-    firstName: '',
-    lastName: '',
     password: '',
     email: '',
     message: '',
     messageType: '',
     showAlert: false
   }),
-
-  mounted () {
-    this.$validator.localize('en', this.dictionary)
-  },
-
   methods: {
-    async submit () {
+    async login () {
       try {
-        await authenticationService.register({
-          firstName: this.firstName,
-          lastName: this.lastName,
+        const response = await authenticationService.login({
           email: this.email,
           password: this.password
         })
-        this.message = 'successful register'
+
+        await this.$store.dispatch('setToken', response.data.token)
+        await this.$store.dispatch('setFirstName', response.data.user.firstName)
+        await this.$store.dispatch('setLastName', response.data.user.lastName)
+        await this.$store.dispatch('setRole', response.data.role.name)
+        this.message = 'successful login'
         this.messageType = 'success'
       } catch (err) {
         this.message = err.response.data.error
@@ -110,8 +89,6 @@ export default {
       }
     },
     clear () {
-      this.firstName = ''
-      this.lastName = ''
       this.email = ''
       this.password = ''
       this.$validator.reset()
