@@ -10,7 +10,8 @@ export default new Vuex.Store({
     firstName: null,
     lastName: null,
     role: null,
-    isUserLoggedIn: false
+    isUserLoggedIn: false,
+    showSidebar: false
   },
   mutations: {
     setToken (state, token) {
@@ -32,6 +33,9 @@ export default new Vuex.Store({
     },
     setIsUserLoggedIn (state, isUserLoggedIn) {
       state.isUserLoggedIn = isUserLoggedIn
+    },
+    toggleSidebar (state) {
+      state.showSidebar = !state.showSidebar
     }
   },
   actions: {
@@ -49,6 +53,9 @@ export default new Vuex.Store({
     },
     setIsUserLoggedIn ({commit}, isUserLoggedIn) {
       commit('setIsUserLoggedIn', isUserLoggedIn)
+    },
+    toggleSidebar ({commit}) {
+      commit('toggleSidebar')
     }
   }
 })

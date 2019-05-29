@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <toolbar></toolbar>
-    <v-navigation-drawer app></v-navigation-drawer>
+    <side-bar></side-bar>
     <v-content>
       <v-container fluid>
         <router-view></router-view>
@@ -13,10 +13,11 @@
 
 <script>
 import Toolbar from './components/Toolbar'
+import SideBar from './components/Sidebar'
 
 export default {
   name: 'App',
-  components: {Toolbar},
+  components: {Toolbar, SideBar},
   comments: {
     Toolbar
   }
