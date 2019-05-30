@@ -1,6 +1,60 @@
 <template>
   <div>
     <h1 class="heading grey--text">Rooms</h1>
+    <v-dialog v-model="dialog" max-width="500px">
+      <template v-slot:activator="{ on }">
+        <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">{{ formTitle }}</span>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editedItem.number" label="Number"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editedItem.floor" label="Floor"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editedItem.peopleNumber" label="People number"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editedItem.type" label="type"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editedItem.bedNumber" label="Bed number"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm8 md6>
+                <v-checkbox v-model="editedItem.teapot" label="teapot"></v-checkbox>
+              </v-flex>
+              <v-flex xs12 sm8 md6>
+                <v-checkbox v-model="editedItem.tv" label="tv"></v-checkbox>
+              </v-flex>
+              <v-flex xs12 sm8 md6>
+                <v-checkbox v-model="editedItem.balcony" label="balcony"></v-checkbox>
+              </v-flex>
+              <v-flex xs12 sm8 md6>
+                <v-checkbox v-model="editedItem.fridge" label="fridge"></v-checkbox>
+              </v-flex>
+              <v-flex xs12 sm8 md6>
+                <v-checkbox v-model="editedItem.freeBeverages" label="freeBeverages"></v-checkbox>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+          <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-container fluid grid-list-md>
       <v-data-iterator
         :items="items"
@@ -11,11 +65,25 @@
         wrap
       >
         <template v-slot:item="props">
-          <v-flex xs12 sm6 md4 lg3>
+          <v-flex xs12 sm6 md4 lg2>
             <v-card>
-              <v-card-title
-                ><h4>{{ props.item.type }}</h4></v-card-title
-              >
+              <v-card-title>
+                <h4>{{ props.item.type }}</h4>
+                <v-spacer></v-spacer>
+                <v-icon
+                  small
+                  class="mr-2"
+                  @click="editItem(props.item)"
+                >
+                  edit
+                </v-icon>
+                <v-icon
+                  small
+                  @click="deleteItem(props.item)"
+                >
+                  delete
+                </v-icon>
+              </v-card-title>
               <v-divider></v-divider>
               <v-list dense>
                 <v-list-tile>
@@ -110,21 +178,72 @@
 export default {
   name: 'Rooms',
   methods: {
-    bool2Icon (bool) {
-      if (bool) {
-        return 'check'
+    editItem (item) {
+      console.log(item)
+      this.editedIndex = this.items.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialog = true
+    },
+
+    deleteItem (item) {
+      const index = this.items.indexOf(item)
+      confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+    },
+
+    close () {
+      this.dialog = false
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      }, 300)
+    },
+
+    save () {
+      if (this.editedIndex > -1) {
+        Object.assign(this.data[this.editedIndex], this.editedItem)
+      } else {
+        this.data.push(this.editedItem)
       }
-      return 'canacel'
+      this.close()
     }
   },
   data: () => {
     return {
+      dialog: false,
       rowsPerPageItems: [4, 8, 12],
       pagination: {
         rowsPerPage: 4
       },
+      defaultItem: {
+        id: 1,
+        number: 1,
+        floor: 2,
+        peopleNumber: 2,
+        type: 'Standard room',
+        bedNumber: 1,
+        teapot: true,
+        tv: true,
+        balcony: true,
+        fridge: false,
+        freeBeverages: false
+      },
+      editedIndex: -1,
+      editedItem: {
+        id: 1,
+        number: 1,
+        floor: 2,
+        peopleNumber: 2,
+        type: 'Standard room',
+        bedNumber: 1,
+        teapot: true,
+        tv: true,
+        balcony: true,
+        fridge: false,
+        freeBeverages: false
+      },
       items: [
         {
+          id: 1,
           number: 1,
           floor: 2,
           peopleNumber: 2,
@@ -137,6 +256,17 @@ export default {
           freeBeverages: false
         }
       ]
+    }
+  },
+  computed: {
+    formTitle () {
+      return this.editedIndex === -1 ? 'New Room' : 'Edit Room'
+    }
+  },
+
+  watch: {
+    dialog (val) {
+      val || this.close()
     }
   }
 }
