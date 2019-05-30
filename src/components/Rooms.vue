@@ -14,19 +14,51 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.number" label="Number"></v-text-field>
+                <v-text-field
+                  v-model="editedItem.number"
+                  label="Number"
+                  v-validate="'required|numeric|integer|min:1'"
+                  :error-messages="errors.collect('Number')"
+                  data-vv-name="Number"
+                >
+                </v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.floor" label="Floor"></v-text-field>
+                <v-text-field
+                  v-model="editedItem.floor"
+                  label="Floor"
+                  v-validate="'required|numeric|integer|min:0'"
+                  :error-messages="errors.collect('Floor')"
+                  data-vv-name="Floor"
+                >
+                </v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.peopleNumber" label="People number"></v-text-field>
+                <v-text-field
+                  v-model="editedItem.peopleNumber"
+                  label="People number"
+                  v-validate="'required|numeric|integer|min:1'"
+                  :error-messages="errors.collect('People number')"
+                  data-vv-name='People number'
+                ></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.type" label="type"></v-text-field>
+                <v-text-field
+                  v-model="editedItem.type"
+                  label="type"
+                  v-validate="'required|min:2'"
+                  :error-messages="errors.collect('type')"
+                  data-vv-name='type'
+                ></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.bedNumber" label="Bed number"></v-text-field>
+                <v-text-field
+                  v-model="editedItem.bedNumber"
+                  label="Bed number"
+                  v-validate="'required|numeric|integer|min:1'"
+                  :error-messages="errors.collect('Bed number')"
+                  data-vv-name='Bed number'
+                ></v-text-field>
               </v-flex>
               <v-flex xs12 sm8 md6>
                 <v-checkbox v-model="editedItem.teapot" label="teapot"></v-checkbox>
@@ -49,8 +81,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+          <v-btn color="error" @click="close">Cancel</v-btn>
+          <v-btn color="primary"  :disabled="errors.any()" @click="save">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -215,29 +247,29 @@ export default {
         rowsPerPage: 4
       },
       defaultItem: {
-        id: 1,
-        number: 1,
-        floor: 2,
-        peopleNumber: 2,
-        type: 'Standard room',
-        bedNumber: 1,
-        teapot: true,
-        tv: true,
-        balcony: true,
+        id: -1,
+        number: '',
+        floor: '',
+        peopleNumber: '',
+        type: '',
+        bedNumber: '',
+        teapot: false,
+        tv: false,
+        balcony: false,
         fridge: false,
         freeBeverages: false
       },
       editedIndex: -1,
       editedItem: {
-        id: 1,
-        number: 1,
-        floor: 2,
-        peopleNumber: 2,
-        type: 'Standard room',
-        bedNumber: 1,
-        teapot: true,
-        tv: true,
-        balcony: true,
+        id: -1,
+        number: '',
+        floor: '',
+        peopleNumber: '',
+        type: '',
+        bedNumber: '',
+        teapot: false,
+        tv: false,
+        balcony: false,
         fridge: false,
         freeBeverages: false
       },
