@@ -1,11 +1,9 @@
 <template>
-  <v-app>
+  <v-app class="grey lighten-4">
     <toolbar></toolbar>
     <side-bar></side-bar>
-    <v-content>
-      <v-container fluid>
+    <v-content class="mx-4 mb-4">
         <router-view></router-view>
-      </v-container>
     </v-content>
     <v-footer app></v-footer>
   </v-app>
@@ -17,20 +15,9 @@ import SideBar from './components/Sidebar'
 
 export default {
   name: 'App',
-  components: {Toolbar, SideBar},
-  comments: {
-    Toolbar
-  }
+  components: {Toolbar, SideBar}
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
