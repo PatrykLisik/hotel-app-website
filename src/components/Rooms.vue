@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="heading grey--text">Rooms</h1>
-    <v-dialog v-model="dialog" max-width="500px" v-if="$store.state.role==='Admin'">
+    <v-dialog v-model="dialog" max-width="500px" v-if="$store.state.role==='Admin' || $store.state.role==='Manager'">
       <template v-slot:activator="{ on }">
         <v-btn color="primary" dark class="mb-2" v-on="on" >New Room</v-btn>
       </template>
