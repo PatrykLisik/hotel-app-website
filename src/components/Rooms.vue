@@ -1,9 +1,9 @@
 <template>
   <div>
     <h1 class="heading grey--text">Rooms</h1>
-    <v-dialog v-model="dialog" max-width="500px">
+    <v-dialog v-model="dialog" max-width="500px" v-if="$store.state.role==='Admin'">
       <template v-slot:activator="{ on }">
-        <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+        <v-btn color="primary" dark class="mb-2" v-on="on" >New Room</v-btn>
       </template>
       <v-card>
         <v-card-title>
@@ -106,12 +106,14 @@
                   small
                   class="mr-2"
                   @click="editItem(props.item)"
+                  v-if="$store.state.role==='Admin' || $store.state.role==='Manager'"
                 >
                   edit
                 </v-icon>
                 <v-icon
                   small
                   @click="deleteItem(props.item)"
+                  v-if="$store.state.role==='Admin' || $store.state.role==='Manager'"
                 >
                   delete
                 </v-icon>
@@ -232,9 +234,9 @@ export default {
 
     save () {
       if (this.editedIndex > -1) {
-        Object.assign(this.data[this.editedIndex], this.editedItem)
+        Object.assign(this.items[this.editedIndex], this.editedItem)
       } else {
-        this.data.push(this.editedItem)
+        this.items.push(this.editedItem)
       }
       this.close()
     }
