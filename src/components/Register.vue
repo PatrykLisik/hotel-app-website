@@ -1,4 +1,5 @@
 <template>
+  <v-container fluid grid-list-md>
   <v-layout align-center justify-center>
     <v-flex xs12>
       <Alert
@@ -62,6 +63,7 @@
       </v-card>
     </v-flex>
   </v-layout>
+  </v-container>
 </template>
 
 <script>
