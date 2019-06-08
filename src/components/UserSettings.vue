@@ -1,11 +1,14 @@
 <template>
-
+ <PageTitle name="Setting"/>
 </template>
 
 <script>
-  export default {
-    name: 'UserSettings'
-  }
+import PageTitle from './PageTitle'
+
+export default {
+  name: 'UserSettings',
+  components: {PageTitle}
+}
 </script>
 
 <style scoped>

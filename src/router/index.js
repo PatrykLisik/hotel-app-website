@@ -6,7 +6,6 @@ import Rooms from '@/components/Rooms'
 import AllUsers from '@/components/AllUsers'
 import UserSettings from '@/components/UserSettings'
 
-
 Vue.use(Router)
 
 export default new Router({
