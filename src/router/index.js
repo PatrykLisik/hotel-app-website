@@ -31,7 +31,7 @@ export default new Router({
       component: UserSettings
     },
     {
-      path: '/AllUsers',
+      path: '/allUsers',
       name: 'AllUsers',
       component: AllUsers
     }

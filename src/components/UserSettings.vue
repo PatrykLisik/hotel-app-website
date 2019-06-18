@@ -80,12 +80,9 @@
 </template>
 
 <script>
-import PageTitle from './PageTitle'
-import Alert from './Alert'
-
 export default {
   name: 'UserSettings',
-  components: { PageTitle, Alert },
+
   $_veeValidate: {
     validator: 'new'
   },
