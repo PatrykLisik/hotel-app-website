@@ -64,7 +64,6 @@
                   :type="showPassword2 ? 'text' : 'password'"
                   :append-icon="showPassword2 ? 'visibility' : 'visibility_off'"
                   @click:append="showPassword2 = !showPassword2"
-                  required
                 ></v-text-field>
               </v-form>
             </v-card-text>

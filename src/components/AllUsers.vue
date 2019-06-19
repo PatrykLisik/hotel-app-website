@@ -11,7 +11,7 @@
       <v-spacer></v-spacer>
       <v-dialog v-model="dialog" max-width="500px">
         <template v-slot:activator="{ on }">
-          <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+          <v-btn color="primary" dark class="mb-2" v-on="on">New User</v-btn>
         </template>
         <v-card>
           <v-card-title>
@@ -25,7 +25,7 @@
                   <v-text-field
                     v-model="editedItem.id"
                     label="ID"
-                    disabled="true"/>
+                    disabled/>
                 </v-flex>
                 <v-flex xs12 sm12 md12>
                   <v-text-field
@@ -70,7 +70,8 @@
                 <v-flex xs12 sm12 md12>
                   <v-text-field
                     v-model="editedItem.password"
-                    v-validate="'required|max:128|min:4'"
+                    ref="password"
+                    v-validate="'required|max:128|min:8'"
                     :counter="128"
                     :error-messages="errors.collect('password')"
                     label="Password"
@@ -102,7 +103,10 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" :disabled="errors.any()" flat @click="save">Save</v-btn>
+            <v-btn color="blue darken-1"
+                   :disabled="errors.any() && editedItem.lastName && editedItem.firstName && editedItem.email"
+                   flat
+                   @click="save">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -147,8 +151,13 @@ import UserService from '../services/UserService'
 
 export default {
   name: 'AllUsers',
+  $_veeValidate: {
+    validator: 'new'
+  },
   components: {PageTitle},
   data: () => ({
+    showPassword: false,
+    showPassword2: false,
     dialog: false,
     headers: [
       { text: 'ID', value: 'id', align: 'left' },
@@ -180,7 +189,7 @@ export default {
 
   computed: {
     formTitle () {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      return this.editedIndex === -1 ? 'New User' : 'Edit User'
     }
   },
 
@@ -188,6 +197,10 @@ export default {
     dialog (val) {
       val || this.close()
     }
+  },
+
+  mounted () {
+    this.$validator.localize('en', this.dictionary)
   },
 
   async created () {
