@@ -22,22 +22,23 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.name" label="ID"></v-text-field>
+                  <v-text-field v-model="editedItem.id" label="ID" disabled="true"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.calories" label="First name"></v-text-field>
+                  <v-text-field v-model="editedItem.firstName" label="First name"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.fat" label="Last name"></v-text-field>
+                  <v-text-field v-model="editedItem.lastName" label="Last name"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.carbs" label="email"></v-text-field>
+                  <v-text-field v-model="editedItem.email" label="email"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.protein" label="CreatedAt"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.protein" label="Role"></v-text-field>
+                  <v-select
+                    :items="Object.keys(RoleNameToRoleId)"
+                    label="Role"
+                    :item-value="RoleIdToRoleName[editedItem.role]"
+                  ></v-select>
                 </v-flex>
               </v-layout>
             </v-container>
