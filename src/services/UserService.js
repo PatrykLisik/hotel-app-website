@@ -9,5 +9,8 @@ export default {
   },
   update (data) {
     return Api().update('user', data)
+  },
+  getRoles () {
+    return Api().get('user/roles')
   }
 }

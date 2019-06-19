@@ -58,10 +58,10 @@
     >
       <template v-slot:items="props">
         <td>{{ props.item.id }}</td>
-        <td class="text-xs-right">{{ props.item.firstName }}</td>
-        <td class="text-xs-right">{{ props.item.lastName }}</td>
-        <td class="text-xs-right">{{ props.item.email }}</td>
-        <td class="text-xs-right">{{ props.item.roleId }}</td>
+        <td class="text-xs">{{ props.item.firstName }}</td>
+        <td class="text-xs">{{ props.item.lastName }}</td>
+        <td class="text-xs">{{ props.item.email }}</td>
+        <td class="text-xs">{{ RoleIdToRoleName[props.item.roleId] }}</td>
         <td class="justify-center layout px-0">
           <v-icon
             small
@@ -102,6 +102,8 @@ export default {
       { text: 'Role', value: 'role', sortable: false }
     ],
     users: [],
+    RoleNameToRoleId: {},
+    RoleIdToRoleName: {},
     editedIndex: -1,
     editedItem: {
       id: '',
@@ -133,14 +135,25 @@ export default {
 
   async created () {
     await this.initialize()
-    console.log('Users2 ' + this.users)
+    console.log('RoleNameToRoleId ' + this.RoleNameToRoleId)
   },
 
   methods: {
     async initialize () {
       const response = await UserService.getAll()
       this.users = response.data
-      console.log('Users' + this.users.length)
+      const rolesResponse = await UserService.getRoles()
+      const roles = rolesResponse.data
+
+      this.RoleNameToRoleId = {}
+      this.RoleIdToRoleName = {}
+
+      for (let i = 0; i < roles.length; i++) {
+        const role = roles[i]
+
+        this.RoleNameToRoleId[role.name] = role.id
+        this.RoleIdToRoleName[role.id] = role.name
+      }
     },
 
     editItem (item) {
