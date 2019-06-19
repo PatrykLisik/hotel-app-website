@@ -22,23 +22,78 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.id" label="ID" disabled="true"></v-text-field>
+                  <v-text-field
+                    v-model="editedItem.id"
+                    label="ID"
+                    disabled="true"/>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.firstName" label="First name"></v-text-field>
+                <v-flex xs12 sm12 md12>
+                  <v-text-field
+                    v-model="editedItem.firstName"
+                    v-validate="'required|alpha|max:32|min:3'"
+                    :counter="32"
+                    :error-messages="errors.collect('first name')"
+                    label="First name"
+                    data-vv-name="first name"
+                    required
+                  />
                 </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.lastName" label="Last name"></v-text-field>
+                <v-flex xs12 sm12 md12>
+                  <v-text-field
+                    v-model="editedItem.lastName"
+                    v-validate="'required|alpha|max:32|min:3'"
+                    :counter="32"
+                    :error-messages="errors.collect('last name')"
+                    label="Last name"
+                    data-vv-name="last name"
+                    required
+                  />
                 </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.email" label="email"></v-text-field>
+                <v-flex xs12 sm12 md12>
+                  <v-text-field
+                    v-model="editedItem.email"
+                    v-validate="'required|email'"
+                    :error-messages="errors.collect('email')"
+                    label="Email"
+                    data-vv-name="email"
+                    required
+                  />
                 </v-flex>
-                <v-flex xs12 sm6 md4>
+                <v-flex xs12 sm12 md12>
                   <v-select
                     :items="Object.keys(RoleNameToRoleId)"
                     label="Role"
                     :item-value="RoleIdToRoleName[editedItem.role]"
+                    required
                   ></v-select>
+                </v-flex>
+                <v-flex xs12 sm12 md12>
+                  <v-text-field
+                    v-model="editedItem.password"
+                    v-validate="'required|max:128|min:4'"
+                    :counter="128"
+                    :error-messages="errors.collect('password')"
+                    label="Password"
+                    data-vv-name="password"
+                    :type="showPassword ? 'text' : 'password'"
+                    :append-icon="showPassword ? 'visibility' : 'visibility_off'"
+                    @click:append="showPassword = !showPassword"
+                    required
+                  />
+                </v-flex>
+                <v-flex xs12 sm12 md12>
+                <v-text-field
+                  v-validate="'required|confirmed:password'"
+                  :counter="128"
+                  name="password "
+                  :error-messages="errors.collect('confirm password')"
+                  label="Confirm password"
+                  data-vv-name="confirm password"
+                  :type="showPassword2 ? 'text' : 'password'"
+                  :append-icon="showPassword2 ? 'visibility' : 'visibility_off'"
+                  @click:append="showPassword2 = !showPassword2"
+                  required
+                ></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -47,7 +102,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+            <v-btn color="blue darken-1" :disabled="errors.any()" flat @click="save">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -111,7 +166,8 @@ export default {
       firstName: '',
       lastName: '',
       email: '',
-      role: 'user'
+      role: 'user',
+      password: ''
     },
     defaultItem: {
       id: '',
@@ -160,6 +216,7 @@ export default {
     editItem (item) {
       this.editedIndex = this.users.indexOf(item)
       this.editedItem = Object.assign({}, item)
+      this.editedItem.password = ''
       this.dialog = true
     },
 
@@ -179,6 +236,15 @@ export default {
     save () {
       if (this.editedIndex > -1) {
         Object.assign(this.users[this.editedIndex], this.editedItem)
+        UserService.update({
+          id: this.editedItem.id,
+          update: {
+            firstName: this.editedItem.firstName,
+            lastName: this.editedItem.lastName,
+            email: this.editedItem.email,
+            password: this.editedItem.password
+          }
+        })
       } else {
         this.users.push(this.editedItem)
       }
