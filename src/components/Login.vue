@@ -23,7 +23,7 @@
               ></v-text-field>
               <v-text-field
                 v-model="password"
-                v-validate="'required|max:128|min:8'"
+                v-validate="'required|max:128|min:4'"
                 :counter="128"
                 :error-messages="errors.collect('password')"
                 label="Password"

@@ -64,7 +64,6 @@
                   :type="showPassword2 ? 'text' : 'password'"
                   :append-icon="showPassword2 ? 'visibility' : 'visibility_off'"
                   @click:append="showPassword2 = !showPassword2"
-                  required
                 ></v-text-field>
               </v-form>
             </v-card-text>
@@ -80,12 +79,9 @@
 </template>
 
 <script>
-import PageTitle from './PageTitle'
-import Alert from './Alert'
-
 export default {
   name: 'UserSettings',
-  components: { PageTitle, Alert },
+
   $_veeValidate: {
     validator: 'new'
   },
