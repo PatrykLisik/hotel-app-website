@@ -15,8 +15,17 @@ export default () => {
       console.log('Reject' +
         'Token: ' +
         store.state.token)
-      Promise.reject(error)
+      console.log('Error:' + error.message)
     }
   )
+  Axios.interceptors.request.use(request => {
+    console.log('Starting Request', request)
+    return request
+  })
+
+  Axios.interceptors.response.use(response => {
+    console.log('Response:', response)
+    return response
+  })
   return Axios
 }

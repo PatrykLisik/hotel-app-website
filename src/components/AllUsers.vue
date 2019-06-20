@@ -1,13 +1,9 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div>
-    <PageTitle name="All Users"/>
+    <PageTitle name="All Users" />
     <v-toolbar flat color="white">
       <v-toolbar-title>Users</v-toolbar-title>
-      <v-divider
-        class="mx-2"
-        inset
-        vertical
-      ></v-divider>
+      <v-divider class="mx-2" inset vertical></v-divider>
       <v-spacer></v-spacer>
       <v-dialog v-model="dialog" max-width="500px">
         <template v-slot:activator="{ on }">
@@ -25,7 +21,8 @@
                   <v-text-field
                     v-model="editedItem.id"
                     label="ID"
-                    disabled/>
+                    :disabled="1 === 1"
+                  />
                 </v-flex>
                 <v-flex xs12 sm12 md12>
                   <v-text-field
@@ -77,24 +74,28 @@
                     label="Password"
                     data-vv-name="password"
                     :type="showPassword ? 'text' : 'password'"
-                    :append-icon="showPassword ? 'visibility' : 'visibility_off'"
+                    :append-icon="
+                      showPassword ? 'visibility' : 'visibility_off'
+                    "
                     @click:append="showPassword = !showPassword"
                     required
                   />
                 </v-flex>
                 <v-flex xs12 sm12 md12>
-                <v-text-field
-                  v-validate="'required|confirmed:password'"
-                  :counter="128"
-                  name="password "
-                  :error-messages="errors.collect('confirm password')"
-                  label="Confirm password"
-                  data-vv-name="confirm password"
-                  :type="showPassword2 ? 'text' : 'password'"
-                  :append-icon="showPassword2 ? 'visibility' : 'visibility_off'"
-                  @click:append="showPassword2 = !showPassword2"
-                  required
-                ></v-text-field>
+                  <v-text-field
+                    v-validate="'required|confirmed:password'"
+                    :counter="128"
+                    name="password "
+                    :error-messages="errors.collect('confirm password')"
+                    label="Confirm password"
+                    data-vv-name="confirm password"
+                    :type="showPassword2 ? 'text' : 'password'"
+                    :append-icon="
+                      showPassword2 ? 'visibility' : 'visibility_off'
+                    "
+                    @click:append="showPassword2 = !showPassword2"
+                    required
+                  ></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -103,19 +104,24 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1"
-                   :disabled="errors.any() && editedItem.lastName && editedItem.firstName && editedItem.email"
-                   flat
-                   @click="save">Save</v-btn>
+            <v-btn
+              color="blue darken-1"
+              :disabled="
+                errors.any() &&
+                  editedItem.lastName === '' &&
+                  editedItem.firstName === '' &&
+                  editedItem.lastName === '' &&
+                  editedItem.email === ''
+              "
+              flat
+              @click="save"
+              >Save</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <v-data-table
-      :headers="headers"
-      :items="users"
-      class="elevation-1"
-    >
+    <v-data-table :headers="headers" :items="users" class="elevation-1">
       <template v-slot:items="props">
         <td>{{ props.item.id }}</td>
         <td class="text-xs">{{ props.item.firstName }}</td>
@@ -123,17 +129,10 @@
         <td class="text-xs">{{ props.item.email }}</td>
         <td class="text-xs">{{ RoleIdToRoleName[props.item.roleId] }}</td>
         <td class="justify-center layout px-0">
-          <v-icon
-            small
-            class="mr-2"
-            @click="editItem(props.item)"
-          >
+          <v-icon small class="mr-2" @click="editItem(props.item)">
             edit
           </v-icon>
-          <v-icon
-            small
-            @click="deleteItem(props.item)"
-          >
+          <v-icon small @click="deleteItem(props.item)">
             delete
           </v-icon>
         </td>
@@ -154,7 +153,7 @@ export default {
   $_veeValidate: {
     validator: 'new'
   },
-  components: {PageTitle},
+  components: { PageTitle },
   data: () => ({
     showPassword: false,
     showPassword2: false,
@@ -205,7 +204,6 @@ export default {
 
   async created () {
     await this.initialize()
-    console.log('RoleNameToRoleId ' + this.RoleNameToRoleId)
   },
 
   methods: {
@@ -233,9 +231,12 @@ export default {
       this.dialog = true
     },
 
-    deleteItem (item) {
+    async deleteItem (item) {
       const index = this.users.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.users.splice(index, 1)
+      confirm('Are you sure you want to delete this item?') &&
+        this.users.splice(index, 1)
+      const Response = await UserService.delete({ id: item.id })
+      console.log(Response.data)
     },
 
     close () {
@@ -246,10 +247,10 @@ export default {
       }, 300)
     },
 
-    save () {
+    async save () {
       if (this.editedIndex > -1) {
         Object.assign(this.users[this.editedIndex], this.editedItem)
-        UserService.update({
+        await UserService.update({
           id: this.editedItem.id,
           update: {
             firstName: this.editedItem.firstName,
@@ -259,7 +260,14 @@ export default {
           }
         })
       } else {
-        this.users.push(this.editedItem)
+        const newUser = await UserService.create({
+          firstName: this.editedItem.firstName,
+          lastName: this.editedItem.lastName,
+          email: this.editedItem.email,
+          password: this.editedItem.password,
+          roleId: this.RoleNameToRoleId[this.editedItem.role]
+        })
+        this.users.push(newUser.data)
       }
       this.close()
     }
@@ -267,6 +275,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
