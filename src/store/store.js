@@ -40,6 +40,9 @@ export default new Vuex.Store({
     },
     toggleSidebar (state) {
       state.showSidebar = !state.showSidebar
+    },
+    hideSidebar (state) {
+      state.showSidebar = false
     }
   },
   actions: {
@@ -63,6 +66,17 @@ export default new Vuex.Store({
     },
     toggleSidebar ({commit}) {
       commit('toggleSidebar')
+    },
+    // eslint-disable-next-line
+    reset ({commit, dispatch }) {
+      dispatch('setToken', '')
+      dispatch('setFirstName', '')
+      dispatch('setLastName', '')
+      dispatch('setEmail', '')
+      dispatch('setIsUserLoggedIn', '')
+      dispatch('setRole', '')
+      dispatch('hideSidebar')
     }
+
   }
 })

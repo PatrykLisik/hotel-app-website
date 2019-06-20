@@ -1,6 +1,6 @@
 <template>
   <v-toolbar dense fixed clipped-left app>
-    <v-toolbar-side-icon class="grey--text" @click="showSidebar()"></v-toolbar-side-icon>
+    <v-toolbar-side-icon class="grey--text" @click="showSidebar()" v-show="!$store.state.isUserLoggedIn"/>
     <v-toolbar-title class="text-uppercase grey--text">
       <span class="font-weight-bold">Hotel</span>
       <span>App</span>
@@ -14,7 +14,7 @@
       <v-btn color="grey" flat to="register" v-if="!$store.state.isUserLoggedIn">
         <span> Sign up</span>
       </v-btn>
-      <v-btn color="grey" flat to="/" v-if="$store.state.isUserLoggedIn">
+      <v-btn color="grey" flat to="/" v-if="$store.state.isUserLoggedIn" @click="logout">
         <span> Sign out</span>
       </v-btn>
     </v-toolbar-items>
@@ -27,6 +27,9 @@ export default {
   methods: {
     async showSidebar () {
       await this.$store.dispatch('toggleSidebar')
+    },
+    async logout () {
+      await this.$store.dispatch('reset')
     }
   }
 }
