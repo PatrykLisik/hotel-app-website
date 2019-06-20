@@ -75,7 +75,7 @@ export default new Vuex.Store({
       dispatch('setEmail', '')
       dispatch('setIsUserLoggedIn', '')
       dispatch('setRole', '')
-      dispatch('hideSidebar')
+      commit('hideSidebar')
     }
 
   }

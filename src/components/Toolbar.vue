@@ -1,6 +1,12 @@
 <template>
   <v-toolbar dense fixed clipped-left app>
-    <v-toolbar-side-icon class="grey--text" @click="showSidebar()" v-show="!$store.state.isUserLoggedIn"/>
+    <v-toolbar-side-icon
+      class="grey--text"
+      @click="showSidebar()"
+      visi
+      v-show="$store.state.isUserLoggedIn"
+    />
+
     <v-toolbar-title class="text-uppercase grey--text">
       <span class="font-weight-bold">Hotel</span>
       <span>App</span>
@@ -8,13 +14,24 @@
     <v-spacer></v-spacer>
 
     <v-toolbar-items>
-      <v-btn color ="grey" flat to="login" v-if="!$store.state.isUserLoggedIn"
+      <v-btn color="grey" flat to="login" v-if="!$store.state.isUserLoggedIn"
         >Sign in
       </v-btn>
-      <v-btn color="grey" flat to="register" v-if="!$store.state.isUserLoggedIn">
+      <v-btn
+        color="grey"
+        flat
+        to="register"
+        v-if="!$store.state.isUserLoggedIn"
+      >
         <span> Sign up</span>
       </v-btn>
-      <v-btn color="grey" flat to="/" v-if="$store.state.isUserLoggedIn" @click="logout">
+      <v-btn
+        color="grey"
+        flat
+        to="/"
+        v-if="$store.state.isUserLoggedIn"
+        @click="logout"
+      >
         <span> Sign out</span>
       </v-btn>
     </v-toolbar-items>
