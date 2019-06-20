@@ -1,9 +1,13 @@
 <template>
   <div>
-    <page-title name="Rooms"/>
-    <v-dialog v-model="dialog" max-width="500px" v-if="$store.state.role==='Admin' || $store.state.role==='Manager'">
+    <page-title name="Rooms" />
+    <v-dialog
+      v-model="dialog"
+      max-width="500px"
+      v-if="$store.state.role === 'Admin' || $store.state.role === 'Manager'"
+    >
       <template v-slot:activator="{ on }">
-        <v-btn color="primary" dark class="mb-2" v-on="on" >New Room</v-btn>
+        <v-btn color="primary" dark class="mb-2" v-on="on">New Room</v-btn>
       </template>
       <v-card>
         <v-card-title>
@@ -39,7 +43,7 @@
                   label="People number"
                   v-validate="'required|numeric|integer|min:1'"
                   :error-messages="errors.collect('People number')"
-                  data-vv-name='People number'
+                  data-vv-name="People number"
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
@@ -48,7 +52,7 @@
                   label="type"
                   v-validate="'required|min:2'"
                   :error-messages="errors.collect('type')"
-                  data-vv-name='type'
+                  data-vv-name="type"
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
@@ -57,23 +61,35 @@
                   label="Bed number"
                   v-validate="'required|numeric|integer|min:1'"
                   :error-messages="errors.collect('Bed number')"
-                  data-vv-name='Bed number'
+                  data-vv-name="Bed number"
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm8 md6>
-                <v-checkbox v-model="editedItem.teapot" label="teapot"></v-checkbox>
+                <v-checkbox
+                  v-model="editedItem.teapot"
+                  label="teapot"
+                ></v-checkbox>
               </v-flex>
               <v-flex xs12 sm8 md6>
                 <v-checkbox v-model="editedItem.tv" label="tv"></v-checkbox>
               </v-flex>
               <v-flex xs12 sm8 md6>
-                <v-checkbox v-model="editedItem.balcony" label="balcony"></v-checkbox>
+                <v-checkbox
+                  v-model="editedItem.balcony"
+                  label="balcony"
+                ></v-checkbox>
               </v-flex>
               <v-flex xs12 sm8 md6>
-                <v-checkbox v-model="editedItem.fridge" label="fridge"></v-checkbox>
+                <v-checkbox
+                  v-model="editedItem.fridge"
+                  label="fridge"
+                ></v-checkbox>
               </v-flex>
               <v-flex xs12 sm8 md6>
-                <v-checkbox v-model="editedItem.freeBeverages" label="freeBeverages"></v-checkbox>
+                <v-checkbox
+                  v-model="editedItem.freeBeverages"
+                  label="freeBeverages"
+                ></v-checkbox>
               </v-flex>
             </v-layout>
           </v-container>
@@ -82,7 +98,9 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="error" @click="close">Cancel</v-btn>
-          <v-btn color="primary"  :disabled="errors.any()" @click="save">Save</v-btn>
+          <v-btn color="primary" :disabled="errors.any()" @click="save"
+            >Save</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -106,14 +124,20 @@
                   small
                   class="mr-2"
                   @click="editItem(props.item)"
-                  v-if="$store.state.role==='Admin' || $store.state.role==='Manager'"
+                  v-if="
+                    $store.state.role === 'Admin' ||
+                      $store.state.role === 'Manager'
+                  "
                 >
                   edit
                 </v-icon>
                 <v-icon
                   small
                   @click="deleteItem(props.item)"
-                  v-if="$store.state.role==='Admin' || $store.state.role==='Manager'"
+                  v-if="
+                    $store.state.role === 'Admin' ||
+                      $store.state.role === 'Manager'
+                  "
                 >
                   delete
                 </v-icon>
@@ -200,6 +224,10 @@
                   </v-list-tile-content>
                 </v-list-tile>
               </v-list>
+              <div class="text-xs-center" v-if="$store.state.role === 'User'">
+                <v-divider></v-divider>
+                <v-btn color="primary">Reserve</v-btn>
+              </div>
             </v-card>
           </v-flex>
         </template>
@@ -213,7 +241,7 @@ import PageTitle from './PageTitle'
 
 export default {
   name: 'Rooms',
-  components: {PageTitle},
+  components: { PageTitle },
   methods: {
     editItem (item) {
       console.log(item)
@@ -224,7 +252,8 @@ export default {
 
     deleteItem (item) {
       const index = this.items.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+      confirm('Are you sure you want to delete this item?') &&
+        this.items.splice(index, 1)
     },
 
     close () {
