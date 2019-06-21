@@ -48,6 +48,15 @@
               </v-flex>
               <v-flex xs12 sm6 md4>
                 <v-text-field
+                  v-model="editedItem.cost"
+                  label="Per night cost"
+                  v-validate="'required|numeric|integer'"
+                  :error-messages="errors.collect('Per night cost')"
+                  data-vv-name="Per night cost"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field
                   v-model="editedItem.type"
                   label="type"
                   v-validate="'required|min:2'"
@@ -71,7 +80,7 @@
                 ></v-checkbox>
               </v-flex>
               <v-flex xs12 sm8 md6>
-                <v-checkbox v-model="editedItem.tv" label="tv"></v-checkbox>
+                <v-checkbox v-model="editedItem.roomEquipment.tv" label="tv"></v-checkbox>
               </v-flex>
               <v-flex xs12 sm8 md6>
                 <v-checkbox
@@ -160,6 +169,18 @@
                   <v-list-tile-content>People number:</v-list-tile-content>
                   <v-list-tile-content class="align-end">{{
                     props.item.peopleNumber
+                  }}</v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-content>Cost:</v-list-tile-content>
+                  <v-list-tile-content class="align-end">{{
+                    props.item.cost
+                  }}</v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-content>Room area:</v-list-tile-content>
+                  <v-list-tile-content class="align-end">{{
+                    props.item.roomArea
                   }}</v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
@@ -259,6 +280,7 @@ export default {
         floor: '',
         peopleNumber: '',
         type: '',
+        cost: null,
         roomEquipment: { bedNumber: '',
           teapot: false,
           tv: false,
@@ -273,6 +295,7 @@ export default {
         floor: '',
         peopleNumber: '',
         type: '',
+        cost: null,
         roomEquipment: { bedNumber: '',
           teapot: false,
           tv: false,
@@ -284,17 +307,18 @@ export default {
     }
   },
   methods: {
-    editItem (item) {
+    async editItem (item) {
       console.log(item)
       this.editedIndex = this.items.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
 
-    deleteItem (item) {
+    async deleteItem (item) {
       const index = this.items.indexOf(item)
       confirm('Are you sure you want to delete this item?') &&
         this.items.splice(index, 1)
+      await RoomService.delete({id: item.id})
     },
 
     close () {
@@ -305,13 +329,25 @@ export default {
       }, 300)
     },
 
-    save () {
+    async save () {
       if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem)
+        delete this.editedItem.roomEquipment.id
+        delete this.editedItem.roomEquipment.createdAt
+        delete this.editedItem.roomEquipment.updatedAt
+        delete this.editedItem.createdAt
+        delete this.editedItem.updatedAt
+        await RoomService.update(
+          {
+            id: this.editedItem.id,
+            update: this.editedItem
+          }
+        )
       } else {
-        this.items.push(this.editedItem)
+        delete this.editedItem.id
+        await RoomService.create(this.editedItem)
       }
       this.close()
+      this.initialize()
     },
     async initialize () {
       const response = await RoomService.getAll()
