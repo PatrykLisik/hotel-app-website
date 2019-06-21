@@ -57,7 +57,7 @@
               </v-flex>
               <v-flex xs12 sm6 md4>
                 <v-text-field
-                  v-model="editedItem.bedNumber"
+                  v-model="editedItem.roomEquipment.bedNumber"
                   label="Bed number"
                   v-validate="'required|numeric|integer|min:1'"
                   :error-messages="errors.collect('Bed number')"
@@ -66,7 +66,7 @@
               </v-flex>
               <v-flex xs12 sm8 md6>
                 <v-checkbox
-                  v-model="editedItem.teapot"
+                  v-model="editedItem.roomEquipment.teapot"
                   label="teapot"
                 ></v-checkbox>
               </v-flex>
@@ -75,19 +75,19 @@
               </v-flex>
               <v-flex xs12 sm8 md6>
                 <v-checkbox
-                  v-model="editedItem.balcony"
+                  v-model="editedItem.roomEquipment.balcony"
                   label="balcony"
                 ></v-checkbox>
               </v-flex>
               <v-flex xs12 sm8 md6>
                 <v-checkbox
-                  v-model="editedItem.fridge"
+                  v-model="editedItem.roomEquipment.fridge"
                   label="fridge"
                 ></v-checkbox>
               </v-flex>
               <v-flex xs12 sm8 md6>
                 <v-checkbox
-                  v-model="editedItem.freeBeverages"
+                  v-model="editedItem.roomEquipment.freeBeverages"
                   label="freeBeverages"
                 ></v-checkbox>
               </v-flex>
@@ -165,16 +165,16 @@
                 <v-list-tile>
                   <v-list-tile-content>Bed number:</v-list-tile-content>
                   <v-list-tile-content class="align-end">{{
-                    props.item.bedNumber
+                    props.item.roomEquipment.bedNumber
                   }}</v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
                   <v-list-tile-content>Teapot:</v-list-tile-content>
                   <v-list-tile-content class="align-end">
-                    <span v-if="!props.item.teapot">
+                    <span v-if="!props.item.roomEquipment.teapot">
                       <v-icon color="error">cancel</v-icon>
                     </span>
-                    <span v-if="props.item.teapot">
+                    <span v-if="props.item.roomEquipment.teapot">
                       <v-icon color="primary">check</v-icon>
                     </span>
                   </v-list-tile-content>
@@ -182,10 +182,10 @@
                 <v-list-tile>
                   <v-list-tile-content>TV:</v-list-tile-content>
                   <v-list-tile-content class="align-end">
-                    <span v-if="!props.item.tv">
+                    <span v-if="!props.item.roomEquipment.tv">
                       <v-icon color="error">cancel</v-icon>
                     </span>
-                    <span v-if="props.item.tv">
+                    <span v-if="props.item.roomEquipment.tv">
                       <v-icon color="primary">check</v-icon>
                     </span>
                   </v-list-tile-content>
@@ -193,10 +193,10 @@
                 <v-list-tile>
                   <v-list-tile-content>Balcony:</v-list-tile-content>
                   <v-list-tile-content class="align-end">
-                    <span v-if="!props.item.balcony">
+                    <span v-if="!props.item.roomEquipment.balcony">
                       <v-icon color="error">cancel</v-icon>
                     </span>
-                    <span v-if="props.item.balcony">
+                    <span v-if="props.item.roomEquipment.balcony">
                       <v-icon color="primary">check</v-icon>
                     </span>
                   </v-list-tile-content>
@@ -204,10 +204,10 @@
                 <v-list-tile>
                   <v-list-tile-content>Fridge:</v-list-tile-content>
                   <v-list-tile-content class="align-end">
-                    <span v-if="!props.item.fridge">
+                    <span v-if="!props.item.roomEquipment.fridge">
                       <v-icon color="error">cancel</v-icon>
                     </span>
-                    <span v-if="props.item.fridge">
+                    <span v-if="props.item.roomEquipment.fridge">
                       <v-icon color="primary">check</v-icon>
                     </span>
                   </v-list-tile-content>
@@ -215,10 +215,10 @@
                 <v-list-tile>
                   <v-list-tile-content>Free beverages:</v-list-tile-content>
                   <v-list-tile-content class="align-end">
-                    <span v-if="!props.item.freeBeverages">
+                    <span v-if="!props.item.roomEquipment.freeBeverages">
                       <v-icon color="error">cancel</v-icon>
                     </span>
-                    <span v-if="props.item.freeBeverages">
+                    <span v-if="props.item.roomEquipment.freeBeverages">
                       <v-icon color="primary">check</v-icon>
                     </span>
                   </v-list-tile-content>
@@ -238,10 +238,51 @@
 
 <script>
 import PageTitle from './PageTitle'
+import RoomService from '../services/RoomService'
 
 export default {
   name: 'Rooms',
   components: { PageTitle },
+  async created () {
+    await this.initialize()
+  },
+  data: () => {
+    return {
+      dialog: false,
+      rowsPerPageItems: [6, 12, 18, {'text': '$vuetify.dataIterator.rowsPerPageAll', 'value': -1}],
+      pagination: {
+        rowsPerPage: 6
+      },
+      defaultItem: {
+        id: -1,
+        number: '',
+        floor: '',
+        peopleNumber: '',
+        type: '',
+        roomEquipment: { bedNumber: '',
+          teapot: false,
+          tv: false,
+          balcony: false,
+          fridge: false,
+          freeBeverages: false}
+      },
+      editedIndex: -1,
+      editedItem: {
+        id: -1,
+        number: '',
+        floor: '',
+        peopleNumber: '',
+        type: '',
+        roomEquipment: { bedNumber: '',
+          teapot: false,
+          tv: false,
+          balcony: false,
+          fridge: false,
+          freeBeverages: false}
+      },
+      items: []
+    }
+  },
   methods: {
     editItem (item) {
       console.log(item)
@@ -271,59 +312,13 @@ export default {
         this.items.push(this.editedItem)
       }
       this.close()
+    },
+    async initialize () {
+      const response = await RoomService.getAll()
+      this.items = response.data
     }
   },
-  data: () => {
-    return {
-      dialog: false,
-      rowsPerPageItems: [4, 8, 12],
-      pagination: {
-        rowsPerPage: 4
-      },
-      defaultItem: {
-        id: -1,
-        number: '',
-        floor: '',
-        peopleNumber: '',
-        type: '',
-        bedNumber: '',
-        teapot: false,
-        tv: false,
-        balcony: false,
-        fridge: false,
-        freeBeverages: false
-      },
-      editedIndex: -1,
-      editedItem: {
-        id: -1,
-        number: '',
-        floor: '',
-        peopleNumber: '',
-        type: '',
-        bedNumber: '',
-        teapot: false,
-        tv: false,
-        balcony: false,
-        fridge: false,
-        freeBeverages: false
-      },
-      items: [
-        {
-          id: 1,
-          number: 1,
-          floor: 2,
-          peopleNumber: 2,
-          type: 'Standard room',
-          bedNumber: 1,
-          teapot: true,
-          tv: true,
-          balcony: true,
-          fridge: false,
-          freeBeverages: false
-        }
-      ]
-    }
-  },
+
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'New Room' : 'Edit Room'
