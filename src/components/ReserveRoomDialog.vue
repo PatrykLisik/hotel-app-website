@@ -1,6 +1,5 @@
 <template>
   <v-dialog
-    v-model="reserveDialog"
     max-width="500px"
     v-if="$store.state.role === 'User'"
   >
