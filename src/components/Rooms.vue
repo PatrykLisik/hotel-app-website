@@ -245,10 +245,7 @@
                   </v-list-tile-content>
                 </v-list-tile>
               </v-list>
-              <div class="text-xs-center" v-if="$store.state.role === 'User'">
-                <v-divider></v-divider>
-                <v-btn color="primary">Reserve</v-btn>
-              </div>
+            <ReserveRoomDialog/>
             </v-card>
           </v-flex>
         </template>
@@ -259,11 +256,12 @@
 
 <script>
 import PageTitle from './PageTitle'
+import ReserveRoomDialog from './ReserveRoomDialog'
 import RoomService from '../services/RoomService'
 
 export default {
   name: 'Rooms',
-  components: { PageTitle },
+  components: { PageTitle, ReserveRoomDialog },
   async created () {
     await this.initialize()
   },
