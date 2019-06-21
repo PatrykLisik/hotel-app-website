@@ -20,6 +20,7 @@
               :close-on-content-click="false"
               :nudge-right="40"
               lazy
+              :allowed-dates="allowedDates"
               transition="scale-transition"
               offset-y
               full-width
@@ -37,7 +38,12 @@
                   v-on="on"
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="startDate" no-title @input="menu1 = false"></v-date-picker>
+              <v-date-picker
+                v-model="startDate"
+                no-title
+                @input="menu1 = false"
+                :allowed-dates="allowedDates"
+              />
             </v-menu>
             </v-flex>
             <v-flex xs12 lg6>
@@ -66,6 +72,7 @@
               </template>
               <v-date-picker
                 v-model="endDate"
+                :allowed-dates="allowedDates"
                 no-title
                 @input="menu2 = false"
                 :min = "startDate"
@@ -75,14 +82,20 @@
           </v-layout>
         </v-container>
       </v-card-text>
+      <v-btn color="primary">Reserve</v-btn>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
+import ReservationService from '../services/ReservationService'
+import moment from 'moment'
+
 export default {
   name: 'ReserveRoomDialog',
+  props: ['roomId'],
   data: vm => ({
+    reserved: [],
     startDate: new Date().toISOString().substr(0, 10),
     dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
     endDate: new Date().toISOString().substr(0, 10),
@@ -90,6 +103,14 @@ export default {
     menu1: false,
     menu2: false
   }),
+  async created () {
+    const response = await ReservationService.getReservationsOfRoom({id: this.$props.roomId})
+    const reservations = response.data
+    for (let i = 0; i < reservations.length; i++) {
+      const reservation = reservations[i]
+      this.reserved.push({startDate: reservation.startDate, endDate: reservation.endDate})
+    }
+  },
 
   computed: {
     computedDateFormatted () {
@@ -121,6 +142,18 @@ export default {
 
       const [month, day, year] = date.split('/')
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+    },
+    allowedDates (date) {
+      console.log('Date ' + date)
+      for (let i = 0; i < this.reserved.length; i++) {
+        const startDate = this.reserved[i].startDate
+        const endDate = this.reserved[i].endDate
+        if (moment(date).isBetween(startDate, endDate)) { return false }
+      }
+      return true
+    },
+    reserveRooom () {
+
     }
   }
 }

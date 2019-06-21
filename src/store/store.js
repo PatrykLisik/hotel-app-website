@@ -7,6 +7,7 @@ export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   state: {
     token: null,
+    id: null,
     firstName: null,
     lastName: null,
     role: null,
@@ -35,6 +36,9 @@ export default new Vuex.Store({
     setEmail (state, email) {
       state.email = email
     },
+    setId (state, id) {
+      state.id = id
+    },
     setIsUserLoggedIn (state, isUserLoggedIn) {
       state.isUserLoggedIn = isUserLoggedIn
     },
@@ -61,6 +65,9 @@ export default new Vuex.Store({
     setEmail ({commit}, email) {
       commit('setEmail', email)
     },
+    setId ({commit}, id) {
+      commit('setId', id)
+    },
     setIsUserLoggedIn ({commit}, isUserLoggedIn) {
       commit('setIsUserLoggedIn', isUserLoggedIn)
     },
@@ -75,6 +82,7 @@ export default new Vuex.Store({
       dispatch('setEmail', '')
       dispatch('setIsUserLoggedIn', '')
       dispatch('setRole', '')
+      dispatch('setId', -1)
       commit('hideSidebar')
     }
 

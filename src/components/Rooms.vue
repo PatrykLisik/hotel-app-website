@@ -245,7 +245,7 @@
                   </v-list-tile-content>
                 </v-list-tile>
               </v-list>
-            <ReserveRoomDialog/>
+            <ReserveRoomDialog :room-id="props.item.id"/>
             </v-card>
           </v-flex>
         </template>
