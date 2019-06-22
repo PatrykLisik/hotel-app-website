@@ -43,23 +43,20 @@ export default {
     return {
       list: {
         User: [
-          { icon: 'dashboard', text: 'Dashboard', route: '/' },
-          { icon: 'chat', text: 'Send feedback', route: '/feedback' },
+          { icon: 'dashboard', text: 'Rooms', route: '/' },
           { icon: 'attach_money', text: 'Invoices', route: '/invoices' },
           { icon: 'date_range', text: 'Reservations', route: '/reservations' },
           { icon: 'settings', text: 'Manage Account', route: '/settings' }
         ],
         Admin: [
-          { icon: 'dashboard', text: 'Dashboard', route: '/' },
-          { icon: 'chat', text: 'Checkout feedback', route: '/feedback' },
+          { icon: 'dashboard', text: 'Rooms', route: '/' },
           { icon: 'attach_money', text: 'Invoices', route: '/invoices' },
           { icon: 'supervisor_account', text: 'Users', route: '/allUsers' },
           { icon: 'date_range', text: 'Reservations', route: '/allReservations' },
           { icon: 'settings', text: 'Manage Account', route: '/settings' }
         ],
         Manager: [
-          { icon: 'dashboard', text: 'Dashboard', route: '/' },
-          { icon: 'chat', text: 'Checkout feedback', route: '/feedback' },
+          { icon: 'dashboard', text: 'Rooms', route: '/' },
           { icon: 'attach_money', text: 'Invoices', route: '/allInvoices' },
           { icon: 'date_range', text: 'Reservations', route: '/allReservations' },
           { icon: 'settings', text: 'Manage Account', route: '/settings' }
