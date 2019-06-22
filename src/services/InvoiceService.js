@@ -18,6 +18,9 @@ export default {
   },
   pay (data) {
     return Api().post('invoice/pay', data)
+  },
+  getInvoicesOfClient (id) {
+    return Api().get('invoice/client', {params: id})
   }
 
 }
