@@ -1,6 +1,7 @@
 <template>
   <v-dialog
     max-width="500px"
+    v-model="dialog"
     v-if="$store.state.role === 'User'"
   >
     <template v-slot:activator="{ on }">
@@ -34,15 +35,15 @@
                   hint="DD/MM/YYYY format"
                   persistent-hint
                   prepend-icon="event"
-                  @blur="startDate = parseDate(dateFormatted)"
                   v-on="on"
                 ></v-text-field>
               </template>
               <v-date-picker
                 v-model="startDate"
+                :allowed-dates="allowedDates"
+                :dataformatas="formatDate"
                 no-title
                 @input="menu1 = false"
-                :allowed-dates="allowedDates"
               />
             </v-menu>
             </v-flex>
@@ -61,12 +62,11 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model=" endDateFormatted"
+                  v-model="endDateFormatted"
                   label="End Date"
                   hint="DD/MM/YYYY format"
                   persistent-hint
                   prepend-icon="event"
-                  @blur=" endDate = parseDate(endDateFormatted)"
                   v-on="on"
                 ></v-text-field>
               </template>
@@ -74,6 +74,7 @@
                 v-model="endDate"
                 :allowed-dates="allowedDates"
                 no-title
+                :dataformatas="formatDate"
                 @input="menu2 = false"
                 :min = "startDate"
               />
@@ -82,12 +83,13 @@
           </v-layout>
         </v-container>
       </v-card-text>
-      <v-btn color="primary">Reserve</v-btn>
+      <v-btn color="primary" @click="reserveRoom">Reserve</v-btn>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
+/* eslint-disable */
 import ReservationService from '../services/ReservationService'
 import moment from 'moment'
 
@@ -95,6 +97,7 @@ export default {
   name: 'ReserveRoomDialog',
   props: ['roomId'],
   data: vm => ({
+    dialog: false,
     reserved: [],
     startDate: new Date().toISOString().substr(0, 10),
     dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
@@ -144,7 +147,6 @@ export default {
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     },
     allowedDates (date) {
-      console.log('Date ' + date)
       for (let i = 0; i < this.reserved.length; i++) {
         const startDate = this.reserved[i].startDate
         const endDate = this.reserved[i].endDate
@@ -152,8 +154,16 @@ export default {
       }
       return true
     },
-    reserveRooom () {
-
+    async reserveRoom () {
+      const Response = await ReservationService.create({
+        startDate: this.startDate,
+        endDate: this.endDate,
+        clientId: this.$store.state.id,
+        roomId: this.$props.roomId
+      })
+      const reservation = Response.data
+      this.reserved.push({startDate: reservation.startDate, endDate: reservation.endDate})
+      this.dialog = false
     }
   }
 }
