@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div>
     <PageTitle name="Reservations" />
     <v-toolbar flat color="white">
@@ -73,11 +73,11 @@
         <td class="text-xs">{{ props.item.startDate }}</td>
         <td class="text-xs">{{ props.item.endDate }}</td>
         <td class="text-xs">{{ props.item.roomId }}</td>
-        <td class="text-xs">
+        <td>
           <span v-if="props.item.invoiceId === null">
             <v-icon color="error">cancel</v-icon>
           </span>
-          <span v-if="!props.item.invoiceId === null">
+          <span v-if="props.item.invoiceId >0">
             <v-icon color="primary">check</v-icon>
           </span>
         </td>
@@ -91,11 +91,13 @@
         <v-btn color="primary" @click="initialize">Reset</v-btn>
       </template>
     </v-data-table>
+    <v-btn color="primary" @click="createInvoiceFromSelected">Invoice selected</v-btn>
   </div>
 </template>
 
 <script>
 import ReservationService from '../services/ReservationService'
+import InvoiceService from '../services/InvoiceService'
 import PageTitle from './PageTitle'
 
 export default {
@@ -112,7 +114,7 @@ export default {
       },
       { text: 'End Date', value: 'endDate' },
       { text: 'Room', value: 'roomId' },
-      { text: 'Paid', value: 'invoiceId' }
+      { text: 'Invoiced', value: 'invoiceId' }
     ],
     reservations: [],
     editedIndex: -1,
@@ -151,6 +153,17 @@ export default {
   },
 
   methods: {
+    async createInvoiceFromSelected () {
+      try {
+        let ReservationsId = []
+        for (let i = 0; i < this.selected.length; i++) {
+          ReservationsId.push(this.selected[i].id)
+        }
+        await InvoiceService.create({reservationIds: ReservationsId})
+      } catch (e) {
+        console.log(e.message)
+      }
+    },
     async initialize () {
       const Response = await ReservationService.getReservationsOfClient({
         clientId: this.$store.state.id
