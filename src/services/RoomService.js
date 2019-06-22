@@ -14,7 +14,7 @@ export default {
     return Api().put('room', data)
   },
   delete (id) {
-    return Api().delete('room', id)
+    return Api().delete('room', { data: id })
   }
 
 }

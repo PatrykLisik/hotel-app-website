@@ -1,16 +1,9 @@
 <template>
   <div>
+    <PageTitle name="Reservations" />
     <v-toolbar flat color="white">
-      <v-toolbar-title>My CRUD</v-toolbar-title>
-      <v-divider
-        class="mx-2"
-        inset
-        vertical
-      ></v-divider>
-      <v-spacer></v-spacer>
       <v-dialog v-model="dialog" max-width="500px">
         <template v-slot:activator="{ on }">
-          <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
         </template>
         <v-card>
           <v-card-title>
@@ -21,19 +14,34 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
+                  <v-text-field
+                    v-model="editedItem.name"
+                    label="Dessert name"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
+                  <v-text-field
+                    v-model="editedItem.calories"
+                    label="Calories"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
+                  <v-text-field
+                    v-model="editedItem.fat"
+                    label="Fat (g)"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
+                  <v-text-field
+                    v-model="editedItem.carbs"
+                    label="Carbs (g)"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+                  <v-text-field
+                    v-model="editedItem.protein"
+                    label="Protein (g)"
+                  ></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -50,36 +58,31 @@
     <v-data-table
       v-model="selected"
       :headers="headers"
-      :items="desserts"
-      item-key="name"
+      :items="reservations"
+      item-key="id"
       class="elevation-1"
       select-all
     >
       <template v-slot:items="props">
-        <td>
-          <v-checkbox
-            v-model="props.selected"
-            primary
-            hide-details
-          ></v-checkbox>
+        <td  v-if="props.item.invoiceId === null">
+          <v-checkbox v-model="props.selected" primary></v-checkbox>
         </td>
-        <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.calories }}</td>
-        <td class="text-xs-right">{{ props.item.fat }}</td>
-        <td class="text-xs-right">{{ props.item.carbs }}</td>
-        <td class="text-xs-right">{{ props.item.protein }}</td>
+        <td  v-if="props.item.invoiceId >0">
+          <v-checkbox disabled primary ></v-checkbox>
+        </td>
+        <td class="text-xs">{{ props.item.startDate }}</td>
+        <td class="text-xs">{{ props.item.endDate }}</td>
+        <td class="text-xs">{{ props.item.roomId }}</td>
+        <td class="text-xs">
+          <span v-if="props.item.invoiceId === null">
+            <v-icon color="error">cancel</v-icon>
+          </span>
+          <span v-if="!props.item.invoiceId === null">
+            <v-icon color="primary">check</v-icon>
+          </span>
+        </td>
         <td class="justify-center layout px-0">
-          <v-icon
-            small
-            class="mr-2"
-            @click="editItem(props.item)"
-          >
-            edit
-          </v-icon>
-          <v-icon
-            small
-            @click="deleteItem(props.item)"
-          >
+          <v-icon small @click="deleteItem(props.item)">
             delete
           </v-icon>
         </td>
@@ -92,39 +95,42 @@
 </template>
 
 <script>
+import ReservationService from '../services/ReservationService'
+import PageTitle from './PageTitle'
+
 export default {
   name: 'ReservationView',
+  components: { PageTitle },
   data: () => ({
     dialog: false,
     selected: [],
     headers: [
       {
-        text: 'Dessert (100g serving)',
+        text: 'Start Date',
         align: 'left',
-        sortable: false,
-        value: 'name'
+        value: 'startDate'
       },
-      { text: 'Calories', value: 'calories' },
-      { text: 'Fat (g)', value: 'fat' },
-      { text: 'Carbs (g)', value: 'carbs' },
-      { text: 'Protein (g)', value: 'protein' },
-      { text: 'Actions', value: 'name', sortable: false }
+      { text: 'End Date', value: 'endDate' },
+      { text: 'Room', value: 'roomId' },
+      { text: 'Paid', value: 'invoiceId' }
     ],
-    desserts: [],
+    reservations: [],
     editedIndex: -1,
     editedItem: {
-      name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      id: -1,
+      startDate: null,
+      endDate: null,
+      clientId: null,
+      roomId: -1,
+      invoiceId: null
     },
     defaultItem: {
-      name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      id: -1,
+      startDate: null,
+      endDate: null,
+      clientId: null,
+      roomId: -1,
+      invoiceId: null
     }
   }),
 
@@ -140,95 +146,29 @@ export default {
     }
   },
 
-  created () {
-    this.initialize()
+  async created () {
+    await this.initialize()
   },
 
   methods: {
-    initialize () {
-      this.desserts = [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0
-        },
-        {
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5
-        },
-        {
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7
-        }
-      ]
+    async initialize () {
+      const Response = await ReservationService.getReservationsOfClient({
+        clientId: this.$store.state.id
+      })
+      this.reservations = Response.data
     },
 
     editItem (item) {
-      this.editedIndex = this.desserts.indexOf(item)
+      this.editedIndex = this.reservations.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
 
-    deleteItem (item) {
-      const index = this.desserts.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+    async deleteItem (item) {
+      const index = this.reservations.indexOf(item)
+      confirm('Are you sure you want to delete this item?') &&
+        this.reservations.splice(index, 1)
+      await ReservationService.delete({id: item.id})
     },
 
     close () {
@@ -241,9 +181,9 @@ export default {
 
     save () {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem)
+        Object.assign(this.reservations[this.editedIndex], this.editedItem)
       } else {
-        this.desserts.push(this.editedItem)
+        this.reservations.push(this.editedItem)
       }
       this.close()
     }
@@ -251,6 +191,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
