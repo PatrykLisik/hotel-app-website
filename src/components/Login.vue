@@ -83,6 +83,7 @@ export default {
         await this.$store.dispatch('setLastName', response.data.user.lastName)
         await this.$store.dispatch('setRole', response.data.role.name)
         await this.$store.dispatch('setEmail', response.data.user.email)
+        await this.$store.dispatch('setId', response.data.user.id)
         this.message = 'successful login'
         this.messageType = 'success'
       } catch (err) {

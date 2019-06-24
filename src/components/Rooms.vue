@@ -1,9 +1,13 @@
 <template>
   <div>
-    <page-title name="Rooms"/>
-    <v-dialog v-model="dialog" max-width="500px" v-if="$store.state.role==='Admin' || $store.state.role==='Manager'">
+    <page-title name="Rooms" />
+    <v-dialog
+      v-model="dialog"
+      max-width="500px"
+      v-if="$store.state.role === 'Admin' || $store.state.role === 'Manager'"
+    >
       <template v-slot:activator="{ on }">
-        <v-btn color="primary" dark class="mb-2" v-on="on" >New Room</v-btn>
+        <v-btn color="primary" dark class="mb-2" v-on="on">New Room</v-btn>
       </template>
       <v-card>
         <v-card-title>
@@ -39,7 +43,16 @@
                   label="People number"
                   v-validate="'required|numeric|integer|min:1'"
                   :error-messages="errors.collect('People number')"
-                  data-vv-name='People number'
+                  data-vv-name="People number"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field
+                  v-model="editedItem.cost"
+                  label="Per night cost"
+                  v-validate="'required|numeric|integer'"
+                  :error-messages="errors.collect('Per night cost')"
+                  data-vv-name="Per night cost"
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
@@ -48,32 +61,44 @@
                   label="type"
                   v-validate="'required|min:2'"
                   :error-messages="errors.collect('type')"
-                  data-vv-name='type'
+                  data-vv-name="type"
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
                 <v-text-field
-                  v-model="editedItem.bedNumber"
+                  v-model="editedItem.roomEquipment.bedNumber"
                   label="Bed number"
                   v-validate="'required|numeric|integer|min:1'"
                   :error-messages="errors.collect('Bed number')"
-                  data-vv-name='Bed number'
+                  data-vv-name="Bed number"
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm8 md6>
-                <v-checkbox v-model="editedItem.teapot" label="teapot"></v-checkbox>
+                <v-checkbox
+                  v-model="editedItem.roomEquipment.teapot"
+                  label="teapot"
+                ></v-checkbox>
               </v-flex>
               <v-flex xs12 sm8 md6>
-                <v-checkbox v-model="editedItem.tv" label="tv"></v-checkbox>
+                <v-checkbox v-model="editedItem.roomEquipment.tv" label="tv"></v-checkbox>
               </v-flex>
               <v-flex xs12 sm8 md6>
-                <v-checkbox v-model="editedItem.balcony" label="balcony"></v-checkbox>
+                <v-checkbox
+                  v-model="editedItem.roomEquipment.balcony"
+                  label="balcony"
+                ></v-checkbox>
               </v-flex>
               <v-flex xs12 sm8 md6>
-                <v-checkbox v-model="editedItem.fridge" label="fridge"></v-checkbox>
+                <v-checkbox
+                  v-model="editedItem.roomEquipment.fridge"
+                  label="fridge"
+                ></v-checkbox>
               </v-flex>
               <v-flex xs12 sm8 md6>
-                <v-checkbox v-model="editedItem.freeBeverages" label="freeBeverages"></v-checkbox>
+                <v-checkbox
+                  v-model="editedItem.roomEquipment.freeBeverages"
+                  label="freeBeverages"
+                ></v-checkbox>
               </v-flex>
             </v-layout>
           </v-container>
@@ -82,7 +107,9 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="error" @click="close">Cancel</v-btn>
-          <v-btn color="primary"  :disabled="errors.any()" @click="save">Save</v-btn>
+          <v-btn color="primary" :disabled="errors.any()" @click="save"
+            >Save</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -106,14 +133,20 @@
                   small
                   class="mr-2"
                   @click="editItem(props.item)"
-                  v-if="$store.state.role==='Admin' || $store.state.role==='Manager'"
+                  v-if="
+                    $store.state.role === 'Admin' ||
+                      $store.state.role === 'Manager'
+                  "
                 >
                   edit
                 </v-icon>
                 <v-icon
                   small
                   @click="deleteItem(props.item)"
-                  v-if="$store.state.role==='Admin' || $store.state.role==='Manager'"
+                  v-if="
+                    $store.state.role === 'Admin' ||
+                      $store.state.role === 'Manager'
+                  "
                 >
                   delete
                 </v-icon>
@@ -139,18 +172,30 @@
                   }}</v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
+                  <v-list-tile-content>Cost:</v-list-tile-content>
+                  <v-list-tile-content class="align-end">{{
+                    props.item.cost
+                  }}</v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-content>Room area:</v-list-tile-content>
+                  <v-list-tile-content class="align-end">{{
+                    props.item.roomArea
+                  }}</v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile>
                   <v-list-tile-content>Bed number:</v-list-tile-content>
                   <v-list-tile-content class="align-end">{{
-                    props.item.bedNumber
+                    props.item.roomEquipment.bedNumber
                   }}</v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
                   <v-list-tile-content>Teapot:</v-list-tile-content>
                   <v-list-tile-content class="align-end">
-                    <span v-if="!props.item.teapot">
+                    <span v-if="!props.item.roomEquipment.teapot">
                       <v-icon color="error">cancel</v-icon>
                     </span>
-                    <span v-if="props.item.teapot">
+                    <span v-if="props.item.roomEquipment.teapot">
                       <v-icon color="primary">check</v-icon>
                     </span>
                   </v-list-tile-content>
@@ -158,10 +203,10 @@
                 <v-list-tile>
                   <v-list-tile-content>TV:</v-list-tile-content>
                   <v-list-tile-content class="align-end">
-                    <span v-if="!props.item.tv">
+                    <span v-if="!props.item.roomEquipment.tv">
                       <v-icon color="error">cancel</v-icon>
                     </span>
-                    <span v-if="props.item.tv">
+                    <span v-if="props.item.roomEquipment.tv">
                       <v-icon color="primary">check</v-icon>
                     </span>
                   </v-list-tile-content>
@@ -169,10 +214,10 @@
                 <v-list-tile>
                   <v-list-tile-content>Balcony:</v-list-tile-content>
                   <v-list-tile-content class="align-end">
-                    <span v-if="!props.item.balcony">
+                    <span v-if="!props.item.roomEquipment.balcony">
                       <v-icon color="error">cancel</v-icon>
                     </span>
-                    <span v-if="props.item.balcony">
+                    <span v-if="props.item.roomEquipment.balcony">
                       <v-icon color="primary">check</v-icon>
                     </span>
                   </v-list-tile-content>
@@ -180,10 +225,10 @@
                 <v-list-tile>
                   <v-list-tile-content>Fridge:</v-list-tile-content>
                   <v-list-tile-content class="align-end">
-                    <span v-if="!props.item.fridge">
+                    <span v-if="!props.item.roomEquipment.fridge">
                       <v-icon color="error">cancel</v-icon>
                     </span>
-                    <span v-if="props.item.fridge">
+                    <span v-if="props.item.roomEquipment.fridge">
                       <v-icon color="primary">check</v-icon>
                     </span>
                   </v-list-tile-content>
@@ -191,15 +236,16 @@
                 <v-list-tile>
                   <v-list-tile-content>Free beverages:</v-list-tile-content>
                   <v-list-tile-content class="align-end">
-                    <span v-if="!props.item.freeBeverages">
+                    <span v-if="!props.item.roomEquipment.freeBeverages">
                       <v-icon color="error">cancel</v-icon>
                     </span>
-                    <span v-if="props.item.freeBeverages">
+                    <span v-if="props.item.roomEquipment.freeBeverages">
                       <v-icon color="primary">check</v-icon>
                     </span>
                   </v-list-tile-content>
                 </v-list-tile>
               </v-list>
+            <ReserveRoomDialog :room-id="props.item.id"/>
             </v-card>
           </v-flex>
         </template>
@@ -210,21 +256,67 @@
 
 <script>
 import PageTitle from './PageTitle'
+import ReserveRoomDialog from './ReserveRoomDialog'
+import RoomService from '../services/RoomService'
 
 export default {
   name: 'Rooms',
-  components: {PageTitle},
+  components: { PageTitle, ReserveRoomDialog },
+  async created () {
+    await this.initialize()
+  },
+  data: () => {
+    return {
+      dialog: false,
+      rowsPerPageItems: [6, 12, 18, {'text': '$vuetify.dataIterator.rowsPerPageAll', 'value': -1}],
+      pagination: {
+        rowsPerPage: 6
+      },
+      defaultItem: {
+        id: -1,
+        number: '',
+        floor: '',
+        peopleNumber: '',
+        type: '',
+        cost: null,
+        roomEquipment: { bedNumber: '',
+          teapot: false,
+          tv: false,
+          balcony: false,
+          fridge: false,
+          freeBeverages: false}
+      },
+      editedIndex: -1,
+      editedItem: {
+        id: -1,
+        number: '',
+        floor: '',
+        peopleNumber: '',
+        type: '',
+        cost: null,
+        roomEquipment: { bedNumber: '',
+          teapot: false,
+          tv: false,
+          balcony: false,
+          fridge: false,
+          freeBeverages: false}
+      },
+      items: []
+    }
+  },
   methods: {
-    editItem (item) {
+    async editItem (item) {
       console.log(item)
       this.editedIndex = this.items.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
 
-    deleteItem (item) {
+    async deleteItem (item) {
       const index = this.items.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+      confirm('Are you sure you want to delete this item?') &&
+        this.items.splice(index, 1)
+      await RoomService.delete({id: item.id})
     },
 
     close () {
@@ -235,66 +327,32 @@ export default {
       }, 300)
     },
 
-    save () {
+    async save () {
       if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem)
+        delete this.editedItem.roomEquipment.id
+        delete this.editedItem.roomEquipment.createdAt
+        delete this.editedItem.roomEquipment.updatedAt
+        delete this.editedItem.createdAt
+        delete this.editedItem.updatedAt
+        await RoomService.update(
+          {
+            id: this.editedItem.id,
+            update: this.editedItem
+          }
+        )
       } else {
-        this.items.push(this.editedItem)
+        delete this.editedItem.id
+        await RoomService.create(this.editedItem)
       }
       this.close()
+      this.initialize()
+    },
+    async initialize () {
+      const response = await RoomService.getAll()
+      this.items = response.data
     }
   },
-  data: () => {
-    return {
-      dialog: false,
-      rowsPerPageItems: [4, 8, 12],
-      pagination: {
-        rowsPerPage: 4
-      },
-      defaultItem: {
-        id: -1,
-        number: '',
-        floor: '',
-        peopleNumber: '',
-        type: '',
-        bedNumber: '',
-        teapot: false,
-        tv: false,
-        balcony: false,
-        fridge: false,
-        freeBeverages: false
-      },
-      editedIndex: -1,
-      editedItem: {
-        id: -1,
-        number: '',
-        floor: '',
-        peopleNumber: '',
-        type: '',
-        bedNumber: '',
-        teapot: false,
-        tv: false,
-        balcony: false,
-        fridge: false,
-        freeBeverages: false
-      },
-      items: [
-        {
-          id: 1,
-          number: 1,
-          floor: 2,
-          peopleNumber: 2,
-          type: 'Standard room',
-          bedNumber: 1,
-          teapot: true,
-          tv: true,
-          balcony: true,
-          fridge: false,
-          freeBeverages: false
-        }
-      ]
-    }
-  },
+
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'New Room' : 'Edit Room'
