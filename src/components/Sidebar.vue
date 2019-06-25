@@ -1,10 +1,11 @@
 <template>
   <v-navigation-drawer
-    fixed
     clipped
     app
     v-if="$store.state.showSidebar"
+    width="500"
     class="primary"
+    mobileBreakPoint = "0"
   >
     <v-list class="pt-0" dense>
       <v-list-tile>

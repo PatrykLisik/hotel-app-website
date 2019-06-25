@@ -2,7 +2,7 @@
   <v-toolbar dense fixed clipped-left app>
     <v-toolbar-side-icon
       class="grey--text"
-      @click="showSidebar()"
+      @click.stop="showSidebar()"
       visi
       v-show="$store.state.isUserLoggedIn"
     />

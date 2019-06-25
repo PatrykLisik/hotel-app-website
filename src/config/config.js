@@ -1,3 +1,3 @@
 module.exports = {
-  backendPort: 'http://localhost:5000' || process.env.BACKEND_PORT
+  backendPort: 'https://desolate-peak-96116.herokuapp.com/' || process.env.BACKEND_PORT
 }

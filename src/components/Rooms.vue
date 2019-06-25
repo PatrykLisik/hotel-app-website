@@ -17,7 +17,7 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm6 md6>
                 <v-text-field
                   v-model="editedItem.number"
                   label="Number"
@@ -27,7 +27,7 @@
                 >
                 </v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm6 md6>
                 <v-text-field
                   v-model="editedItem.floor"
                   label="Floor"
@@ -37,7 +37,7 @@
                 >
                 </v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm6 md6>
                 <v-text-field
                   v-model="editedItem.peopleNumber"
                   label="People number"
@@ -46,7 +46,7 @@
                   data-vv-name="People number"
                 ></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm6 md6>
                 <v-text-field
                   v-model="editedItem.cost"
                   label="Per night cost"
@@ -55,7 +55,7 @@
                   data-vv-name="Per night cost"
                 ></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm6 md6>
                 <v-text-field
                   v-model="editedItem.type"
                   label="type"
@@ -64,7 +64,7 @@
                   data-vv-name="type"
                 ></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm6 md6>
                 <v-text-field
                   v-model="editedItem.roomEquipment.bedNumber"
                   label="Bed number"
