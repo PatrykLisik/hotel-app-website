@@ -102,7 +102,7 @@ export default {
     async deleteItem (item) {
       const index = this.invoices.indexOf(item)
       confirm('Are you sure you want to delete this item?') && this.invoices.splice(index, 1)
-      await InvoiceService.delete({id: item.id})
+      await InvoiceService.delete({ id: item.id })
       this.initialize()
     },
 

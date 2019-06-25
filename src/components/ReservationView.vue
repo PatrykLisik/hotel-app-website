@@ -159,7 +159,7 @@ export default {
         for (let i = 0; i < this.selected.length; i++) {
           ReservationsId.push(this.selected[i].id)
         }
-        await InvoiceService.create({reservationIds: ReservationsId})
+        await InvoiceService.create({ reservationIds: ReservationsId })
       } catch (e) {
         console.log(e.message)
       }
@@ -181,7 +181,7 @@ export default {
       const index = this.reservations.indexOf(item)
       confirm('Are you sure you want to delete this item?') &&
         this.reservations.splice(index, 1)
-      await ReservationService.delete({id: item.id})
+      await ReservationService.delete({ id: item.id })
     },
 
     close () {

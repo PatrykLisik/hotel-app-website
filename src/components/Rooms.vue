@@ -268,7 +268,7 @@ export default {
   data: () => {
     return {
       dialog: false,
-      rowsPerPageItems: [6, 12, 18, {'text': '$vuetify.dataIterator.rowsPerPageAll', 'value': -1}],
+      rowsPerPageItems: [6, 12, 18, { 'text': '$vuetify.dataIterator.rowsPerPageAll', 'value': -1 }],
       pagination: {
         rowsPerPage: 6
       },
@@ -284,7 +284,7 @@ export default {
           tv: false,
           balcony: false,
           fridge: false,
-          freeBeverages: false}
+          freeBeverages: false }
       },
       editedIndex: -1,
       editedItem: {
@@ -299,7 +299,7 @@ export default {
           tv: false,
           balcony: false,
           fridge: false,
-          freeBeverages: false}
+          freeBeverages: false }
       },
       items: []
     }
@@ -316,7 +316,7 @@ export default {
       const index = this.items.indexOf(item)
       confirm('Are you sure you want to delete this item?') &&
         this.items.splice(index, 1)
-      await RoomService.delete({id: item.id})
+      await RoomService.delete({ id: item.id })
     },
 
     close () {
