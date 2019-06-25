@@ -5,12 +5,13 @@ import App from './App'
 import router from './router'
 import VeeValidate from 'vee-validate'
 import Vuetify from 'vuetify'
-import {sync} from 'vuex-router-sync'
+import { sync } from 'vuex-router-sync'
 import store from './store/store'
 
 import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@fortawesome/fontawesome-free/css/all.css'
+import './registerServiceWorker'
 
 Vue.config.productionTip = false
 Vue.use(Vuetify)
@@ -20,9 +21,9 @@ sync(store, router)
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
   router,
   store,
   components: { App },
-  template: '<App/>'
-})
+  template: '<App/>',
+  render: h => h(App)
+}).$mount("#app");
