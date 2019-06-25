@@ -11,7 +11,8 @@
     "lint": "eslint --ext .js,.vue src test/unit",
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
-    "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run"
+    "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
+    "serve": "vue-cli-service serve"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.9.0",
