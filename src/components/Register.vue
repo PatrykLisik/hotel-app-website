@@ -72,7 +72,7 @@ import Alert from './Alert'
 
 export default {
   name: 'Register',
-  components: {Alert},
+  components: { Alert },
   $_veeValidate: {
     validator: 'new'
   },

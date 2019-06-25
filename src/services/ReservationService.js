@@ -17,10 +17,10 @@ export default {
     return Api().delete('reservation', { data: id })
   },
   getReservationsOfRoom (id) {
-    return Api().get('reservation/room', {params: id})
+    return Api().get('reservation/room', { params: id })
   },
   getReservationsOfClient (id) {
-    return Api().get('reservation/client', {params: id})
+    return Api().get('reservation/client', { params: id })
   }
 
 }

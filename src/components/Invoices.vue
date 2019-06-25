@@ -87,10 +87,15 @@ export default {
       this.initialize()
     },
     async initialize () {
-      const Response = await InvoiceService.getInvoicesOfClient({
-        clientId: this.$store.state.id
-      })
-      this.invoices = Response.data
+      if (this.$store.state.role === 'User') {
+        const Response = await InvoiceService.getInvoicesOfClient({
+          clientId: this.$store.state.id
+        })
+        this.invoices = Response.data
+      } else if (this.$store.state.role === 'Admin' || this.$store.state.role === 'Manager') {
+        const Response = await InvoiceService.getAll()
+        this.invoices = Response.data
+      }
     },
 
     editItem (item) {
@@ -102,7 +107,7 @@ export default {
     async deleteItem (item) {
       const index = this.invoices.indexOf(item)
       confirm('Are you sure you want to delete this item?') && this.invoices.splice(index, 1)
-      await InvoiceService.delete({id: item.id})
+      await InvoiceService.delete({ id: item.id })
       this.initialize()
     },
 

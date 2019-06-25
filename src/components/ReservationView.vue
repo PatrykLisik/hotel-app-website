@@ -2,58 +2,6 @@
   <div>
     <PageTitle name="Reservations" />
     <v-toolbar flat color="white">
-      <v-dialog v-model="dialog" max-width="500px">
-        <template v-slot:activator="{ on }">
-        </template>
-        <v-card>
-          <v-card-title>
-            <span class="headline">{{ formTitle }}</span>
-          </v-card-title>
-
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field
-                    v-model="editedItem.name"
-                    label="Dessert name"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field
-                    v-model="editedItem.calories"
-                    label="Calories"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field
-                    v-model="editedItem.fat"
-                    label="Fat (g)"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field
-                    v-model="editedItem.carbs"
-                    label="Carbs (g)"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field
-                    v-model="editedItem.protein"
-                    label="Protein (g)"
-                  ></v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
     </v-toolbar>
     <v-data-table
       v-model="selected"
@@ -91,7 +39,9 @@
         <v-btn color="primary" @click="initialize">Reset</v-btn>
       </template>
     </v-data-table>
+    <span v-if="this.$store.state.role === 'User'">
     <v-btn color="primary" @click="createInvoiceFromSelected">Invoice selected</v-btn>
+    </span>
   </div>
 </template>
 
@@ -159,16 +109,21 @@ export default {
         for (let i = 0; i < this.selected.length; i++) {
           ReservationsId.push(this.selected[i].id)
         }
-        await InvoiceService.create({reservationIds: ReservationsId})
+        await InvoiceService.create({ reservationIds: ReservationsId })
       } catch (e) {
         console.log(e.message)
       }
     },
     async initialize () {
-      const Response = await ReservationService.getReservationsOfClient({
-        clientId: this.$store.state.id
-      })
-      this.reservations = Response.data
+      if (this.$store.state.role === 'User') {
+        const Response = await ReservationService.getReservationsOfClient({
+          clientId: this.$store.state.id
+        })
+        this.reservations = Response.data
+      } else if (this.$store.state.role === 'Admin' || this.$store.state.role === 'Manager') {
+        const Response = await ReservationService.getAll()
+        this.reservations = Response.data
+      }
     },
 
     editItem (item) {
@@ -181,7 +136,7 @@ export default {
       const index = this.reservations.indexOf(item)
       confirm('Are you sure you want to delete this item?') &&
         this.reservations.splice(index, 1)
-      await ReservationService.delete({id: item.id})
+      await ReservationService.delete({ id: item.id })
     },
 
     close () {

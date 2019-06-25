@@ -50,28 +50,28 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    setToken ({commit}, token) {
+    setToken ({ commit }, token) {
       commit('setToken', token)
     },
-    setFirstName ({commit}, firstName) {
+    setFirstName ({ commit }, firstName) {
       commit('setFirstName', firstName)
     },
-    setLastName ({commit}, lastName) {
+    setLastName ({ commit }, lastName) {
       commit('setLastName', lastName)
     },
-    setRole ({commit}, role) {
+    setRole ({ commit }, role) {
       commit('setRole', role)
     },
-    setEmail ({commit}, email) {
+    setEmail ({ commit }, email) {
       commit('setEmail', email)
     },
-    setId ({commit}, id) {
+    setId ({ commit }, id) {
       commit('setId', id)
     },
-    setIsUserLoggedIn ({commit}, isUserLoggedIn) {
+    setIsUserLoggedIn ({ commit }, isUserLoggedIn) {
       commit('setIsUserLoggedIn', isUserLoggedIn)
     },
-    toggleSidebar ({commit}) {
+    toggleSidebar ({ commit }) {
       commit('toggleSidebar')
     },
     // eslint-disable-next-line
