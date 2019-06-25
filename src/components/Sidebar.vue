@@ -52,7 +52,7 @@ export default {
           { icon: 'dashboard', text: 'Rooms', route: '/' },
           { icon: 'attach_money', text: 'Invoices', route: '/invoices' },
           { icon: 'supervisor_account', text: 'Users', route: '/allUsers' },
-          { icon: 'date_range', text: 'Reservations', route: '/allReservations' },
+          { icon: 'date_range', text: 'Reservations', route: '/Reservations' },
           { icon: 'settings', text: 'Manage Account', route: '/settings' }
         ],
         Manager: [
